@@ -19,7 +19,7 @@ const columns = [
 const socials = ["in", "f", "X", "▶"];
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-[#051540] text-white">
+    <footer className="relative overflow-hidden bg-[#051540] text-white ">
       <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:40px_40px]" />
       <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand/30 blur-3xl" />
 

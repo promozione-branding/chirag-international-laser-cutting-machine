@@ -110,9 +110,7 @@ export default function About() {
               >
                 <span className="absolute inset-0 animate-ripple rounded-full border border-white/70" />
                 <span className="absolute inset-0 animate-ripple rounded-full border border-white/50 [animation-delay:1.1s]" />
-                <span className="relative grid h-14 w-14 place-items-center rounded-full border border-white/70 bg-white/15 text-white backdrop-blur-md transition-transform hover:scale-110">
-                  <Play size={20} fill="currentColor" className="ml-0.5" />
-                </span>
+               
               </button>
             </motion.div>
           </motion.div>

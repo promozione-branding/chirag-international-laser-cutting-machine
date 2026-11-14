@@ -8,29 +8,56 @@ import "swiper/css/effect-fade";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import MachineArt from "./art/MachineArt";
 import Magnetic from "./ui/Magnetic";
+
+// Source: https://www.chiragint.in/ (Chirag International)
 const machines = [
   {
-    name: "Fiber Laser Cutting Machine",
-    badge: "Best Seller",
-    feats: ["Up to 30kW Power", "±0.01 mm Accuracy", "Stable & Efficient Performance"],
+    name: "Fiber Laser Steel Cutting Machine",
+    badge: "Fiber Cutting",
+    price: "₹ 25,00,000 / Piece",
+    feats: ["Working Area: 3000 × 1500 mm", "Fully Automatic", "Max Cutting Thickness: SS 8 mm"],
     variant: "fiber",
   },
   {
-    name: "Sheet Metal Laser Cutter",
-    badge: "Popular",
-    feats: ["Fully Enclosed Cabin", "Auto Exchange Table", "Smart Nesting Software"],
+    name: "Metal Laser Cutting Machine",
+    badge: "Metal Cutting",
+    price: "₹ 30,00,000 / Piece",
+    feats: ["Fiber Laser Metal Cutting", "Laser Power: 1.5 kW", "Working Area: 3000 × 1500 mm"],
+    variant: "sheet",
+  },
+  {
+    name: "Small Metal Laser Cutting Machine",
+    badge: "Compact",
+    price: "₹ 7,00,000 / Piece",
+    feats: ["Working Area: 3000 × 1500 mm", "Mild Steel, Gold & Silver", "2 Years Warranty"],
     variant: "sheet",
   },
   {
     name: "Tube Laser Cutting Machine",
-    badge: "New",
-    feats: ["Round, Square & Oval Tubes", "Auto Loading System", "3D Bevel Cutting"],
+    badge: "Tube Cutting",
+    price: "₹ 34,00,000 / Piece",
+    feats: ["Max Tube Diameter: 200 mm", "Laser Metal Cutting", "Working Area: 3000 × 1500 mm"],
     variant: "tube",
   },
   {
     name: "Laser Welding Machine",
-    badge: "Top Rated",
-    feats: ["Handheld & Robotic", "Clean, Strong Seams", "Low Heat Distortion"],
+    badge: "Welding",
+    price: "₹ 5,70,000 / Piece",
+    feats: ["Automatic Grade", "Current: 25 A", "Metal Welding Machinery"],
+    variant: "welding",
+  },
+  {
+    name: "CO2 Laser Marking Machine",
+    badge: "Marking",
+    price: "₹ 4,50,000 / Unit",
+    feats: ["CO2 Laser Type", "Marking Speed: 7000 mm/s", "Etching on Wood"],
+    variant: "fiber",
+  },
+  {
+    name: "Jewellery Laser Engraver",
+    badge: "Engraving",
+    price: "₹ 1,85,000 / Piece",
+    feats: ["Jewellery Engraving Machine", "Power: 30 W", "Electric Power Type"],
     variant: "welding",
   },
 ];
@@ -91,8 +118,8 @@ export default function FeaturedMachines() {
                   Our High-Performance Machines
                 </h2>
                 <p className="mt-3 max-w-xs text-[13px] leading-relaxed text-white/70">
-                  Explore our most popular laser cutting machines designed for precision, speed, and long-term
-                  performance.
+                  Explore our most popular laser cutting, welding, marking and engraving machines designed for
+                  precision, speed, and long-term performance.
                 </p>
                 <Magnetic className="mt-6">
                   <a
@@ -181,6 +208,7 @@ export default function FeaturedMachines() {
                       {m.badge}
                     </span>
                     <h3 className="mt-3 text-xl font-bold leading-snug text-white">{m.name}</h3>
+                    <div className="mt-1.5 text-[13px] font-semibold text-brand-200">{m.price}</div>
                     <ul className="mt-3 space-y-1.5">
                       {m.feats.map((f) => (
                         <li key={f} className="flex items-center gap-2 text-[12px] text-white/80">

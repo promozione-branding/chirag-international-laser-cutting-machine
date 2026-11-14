@@ -10,22 +10,11 @@ export default function Logo({ className = "" }) {
   }
   return (
     <a
-      href="#"
+      href="/"
       className={`flex items-center gap-1.5 ${className}`}
       aria-label="Ci Laser Cutting International"
     >
-      <svg viewBox="0 0 48 48" className="h-11 w-11 shrink-0">
-        {dots}
-        <path d="M4 24 H44 M24 4 V44" stroke="#0B3FA8" strokeWidth=".6" opacity=".35" />
-      </svg>
-      <span className="flex flex-col leading-none">
-        <span className="text-[28px] italic tracking-tight text-brand-800">
-          <span className="font-bold">Ci</span> <span className="font-light">laser</span>
-        </span>
-        <span className="mt-1 text-[6.5px] font-semibold uppercase tracking-[0.2em] text-brand-700">
-          Cutting International
-        </span>
-      </span>
+ <img src="/logo.webp" alt="logo" />
     </a>
   );
 }

@@ -79,7 +79,7 @@ export default function Story() {
           style={{ borderRadius: "0 0 28px 28px" }}
         >
           <motion.div style={{ y: buildingY, scale: buildingScale }} className="absolute inset-0">
-            <BuildingArt className="h-full w-full object-cover" />
+            <img src="story.png" alt=""/>
           </motion.div>
         </motion.div>
 

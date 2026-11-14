@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Categories from "@/components/Categories";
 import About from "@/components/About";
-import Features from "@/components/Features";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import FeaturedMachines from "@/components/FeaturedMachines";
 import Story from "@/components/Story";
 import Testimonials from "@/components/Testimonials";
@@ -18,7 +18,7 @@ export default function Home() {
         <Hero />
         <Categories />
         <About />
-        <Features />
+        <WhyChooseUs />
         <FeaturedMachines />
         <Story />
         <Testimonials />
