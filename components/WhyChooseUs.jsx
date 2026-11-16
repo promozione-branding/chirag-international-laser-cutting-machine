@@ -5,41 +5,42 @@ import { Layers, Leaf, Settings, Target, Zap } from "lucide-react";
 
 const EASE = [0.16, 1, 0.3, 1];
 
+/* shifts only apply on 2xl screens, where there is room for them */
 const items = [
   {
     icon: Target,
     title: ["High Cutting", "Accuracy"],
     text: "Precision up to ±0.01 mm for clean and consistent cuts.",
     side: "left",
-    shift: "lg:translate-x-0",
+    shift: "2xl:translate-x-0",
   },
   {
     icon: Zap,
     title: ["Fast & Efficient", "Performance"],
     text: "Higher cutting speed with maximum productivity.",
     side: "left",
-    shift: "lg:-translate-x-12",
+    shift: "2xl:-translate-x-6",
   },
   {
     icon: Layers,
     title: ["Wide Material", "Compatibility"],
     text: "Cuts a variety of materials including mild steel, stainless steel, aluminum, and more.",
     side: "right",
-    shift: "lg:translate-x-0",
+    shift: "2xl:translate-x-0",
   },
   {
     icon: Settings,
     title: ["Low", "Maintenance"],
     text: "Robust design with minimal servicing and longer lifespan.",
     side: "right",
-    shift: "lg:translate-x-6",
+    shift: "2xl:translate-x-4",
   },
   {
     icon: Leaf,
     title: ["Energy", "Efficient"],
     text: "Optimized power usage for lower operating costs.",
     side: "right",
-    shift: "lg:translate-x-10",
+    shift: "2xl:translate-x-6",
   },
 ];
 
@@ -61,7 +62,7 @@ function Words({ text, base = 0 }) {
 }
 
 /* dot + curved line joining a card to the centre circle.
-   The line draws itself, and an energy pulse travels toward the portal. */
+   Only rendered on 2xl screens, where the gap is wide enough to hold it. */
 function Connector({ side, index, reduce }) {
   const left = side === "left";
   return (
@@ -71,7 +72,7 @@ function Connector({ side, index, reduce }) {
       height="40"
       viewBox="0 0 90 40"
       fill="none"
-      className={`pointer-events-none absolute top-1/2 hidden -translate-y-1/2 lg:block ${
+      className={`pointer-events-none absolute top-1/2 hidden -translate-y-1/2 2xl:block ${
         left ? "-right-[70px]" : "-left-[70px] -scale-x-100"
       }`}
     >
@@ -118,13 +119,13 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
   const left = side === "left";
   return (
     /* wrapper keeps the Tailwind translate shift separate from framer-motion's transform */
-    <div className={`relative w-full max-w-[520px] ${shift} ${left ? "lg:ml-auto" : "lg:mr-auto"}`}>
+    <div className={`relative w-full max-w-[520px] ${shift} ${left ? "xl:ml-auto" : "xl:mr-auto"}`}>
       <motion.div
         initial={{ opacity: 0, x: left ? -110 : 110, filter: "blur(8px)" }}
         whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
         viewport={{ once: true }}
         transition={{ duration: 0.9, delay: index * 0.12, ease: EASE }}
-        whileHover={{ x: left ? 10 : -10, scale: 1.02 }}
+        whileHover={{ x: left ? 6 : -6, scale: 1.02 }}
         onMouseEnter={onEnter}
         className="relative"
       >
@@ -148,7 +149,7 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
             />
           )}
 
-          <div className="relative flex skew-x-[8deg] items-center gap-5 px-7 py-5 sm:gap-6">
+          <div className="relative flex skew-x-[8deg] items-center gap-4 px-6 py-4 2xl:gap-6 2xl:px-7 2xl:py-5">
             <motion.div
               animate={
                 reduce
@@ -160,9 +161,9 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
                 scale: { type: "spring", stiffness: 260, damping: 16 },
                 rotate: { duration: 0.7 },
               }}
-              className="grid h-[76px] w-[76px] shrink-0 place-items-center rounded-2xl bg-white text-[#1559e6] shadow-[0_10px_24px_-10px_rgba(37,99,235,0.4)] ring-1 ring-[#e3edff]"
+              className="grid h-[60px] w-[60px] shrink-0 place-items-center rounded-2xl bg-white text-[#1559e6] shadow-[0_10px_24px_-10px_rgba(37,99,235,0.4)] ring-1 ring-[#e3edff] 2xl:h-[76px] 2xl:w-[76px]"
             >
-              <Icon size={38} strokeWidth={1.7} />
+              <Icon className="h-[30px] w-[30px] 2xl:h-[38px] 2xl:w-[38px]" strokeWidth={1.7} />
             </motion.div>
 
             <motion.span
@@ -170,16 +171,17 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
               whileInView={{ scaleY: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.5 + index * 0.1, ease: EASE }}
-              className="h-[70px] w-[2px] shrink-0 rounded-full bg-[#1559e6]"
+              className="h-[60px] w-[2px] shrink-0 rounded-full bg-[#1559e6] 2xl:h-[70px]"
             />
 
-            <div>
+            {/* min-w-0 lets the text wrap instead of pushing the card past its column */}
+            <div className="min-w-0">
               <motion.h3
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.55 + index * 0.1 }}
-                className="text-[20px] font-bold leading-[1.15] text-[#0b1b4a]"
+                className="text-[17px] font-bold leading-[1.15] text-[#0b1b4a] 2xl:text-[20px]"
               >
                 {title[0]}
                 <br />
@@ -190,7 +192,7 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.65 + index * 0.1 }}
-                className="mt-1.5 max-w-[290px] text-[14px] leading-snug text-slate-500"
+                className="mt-1.5 max-w-[290px] text-[13px] leading-snug text-slate-500 2xl:text-[14px]"
               >
                 {text}
               </motion.p>
@@ -219,16 +221,16 @@ function Portal({ reduce }) {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 1.2, ease: EASE }}
-      className="relative mx-auto h-[400px] w-[340px] sm:h-[500px] sm:w-[420px] lg:h-[560px] lg:w-[460px]"
+      className="relative mx-auto h-[400px] w-[340px] sm:h-[500px] sm:w-[420px] xl:h-[460px] xl:w-[360px] 2xl:h-[560px] 2xl:w-[460px]"
     >
-      <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[150%] -translate-x-1/2 rounded-[50%] border border-[#cfe0ff] bg-[radial-gradient(ellipse_at_center,rgba(59,139,255,0.25),transparent_70%)]" />
-      <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[115%] -translate-x-1/2 rounded-[50%] border border-[#b9d3ff]/80" />
+      <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[130%] -translate-x-1/2 rounded-[50%] border border-[#cfe0ff] bg-[radial-gradient(ellipse_at_center,rgba(59,139,255,0.25),transparent_70%)]" />
+      <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[105%] -translate-x-1/2 rounded-[50%] border border-[#b9d3ff]/80" />
       {!reduce &&
         [0, 1.6].map((d) => (
-          <span key={d} aria-hidden className="pointer-events-none absolute bottom-6 left-1/2 h-[70px] w-[115%] -translate-x-1/2">
+          <span key={d} aria-hidden className="pointer-events-none absolute bottom-6 left-1/2 h-[70px] w-[105%] -translate-x-1/2">
             <motion.span
               className="block h-full w-full rounded-[50%] border border-[#6aa5ff]"
-              animate={{ scale: [0.7, 1.25], opacity: [0.7, 0] }}
+              animate={{ scale: [0.7, 1.15], opacity: [0.7, 0] }}
               transition={{ duration: 3.2, repeat: Infinity, delay: d, ease: "easeOut" }}
             />
           </span>
@@ -262,8 +264,6 @@ function Portal({ reduce }) {
             </defs>
             <path d="M 6 38 A 46 46 0 0 1 50 4" stroke="url(#arcGrad)" strokeWidth="1" strokeLinecap="round" fill="none" />
           </motion.svg>
-
-
 
           <motion.div
             aria-hidden
@@ -350,7 +350,7 @@ export default function WhyChooseUs() {
   return (
     <section
       style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
-      className="relative overflow-hidden bg-gradient-to-b from-[#f4f8ff] via-[#eaf2ff] to-[#e3edff] py-16"
+      className="relative overflow-x-clip bg-gradient-to-b from-[#f4f8ff] via-[#eaf2ff] to-[#e3edff] py-16"
     >
       <motion.div
         aria-hidden
@@ -366,7 +366,7 @@ export default function WhyChooseUs() {
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto w-full max-w-[1800px] px-4 lg:px-10">
+      <div className="relative mx-auto w-full max-w-[1800px] px-6 lg:px-10">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4">
             <motion.span
@@ -430,12 +430,13 @@ export default function WhyChooseUs() {
           </motion.p>
         </div>
 
+        {/* 3 columns from xl (1280px); smaller portal until 2xl (1536px) */}
         <div
-          className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_460px_minmax(0,1fr)] lg:gap-16"
+          className="mt-10 grid items-center gap-8 xl:grid-cols-[minmax(0,1fr)_360px_minmax(0,1fr)] xl:gap-10 2xl:grid-cols-[minmax(0,1fr)_460px_minmax(0,1fr)] 2xl:gap-16"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <div className="order-2 flex flex-col gap-6 lg:order-1 lg:gap-8">
+          <div className="order-2 flex flex-col gap-6 xl:order-1 xl:gap-8">
             {left.map((it) => (
               <FeatureCard
                 key={it.title[0]}
@@ -448,7 +449,7 @@ export default function WhyChooseUs() {
             ))}
           </div>
 
-          <div className="order-1 lg:order-2">
+          <div className="order-1 xl:order-2">
             <Portal reduce={reduce} />
           </div>
 

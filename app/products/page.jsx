@@ -1,6 +1,6 @@
-import MachinesHero from "@/components/machines/MachinesHero";
 import ProductCatalogue from "@/components/machines/ProductCatalogue";
 import ContactStrip from "@/components/machines/ContactStrip";
+import PageHero from "@/components/ui/PageHero";
 
 export const metadata = {
   title: "Our Products",
@@ -11,7 +11,13 @@ export const metadata = {
 export default function MachinesPage() {
   return (
     <div className="bg-[#f8faff] text-[#101d3d]">
-      <MachinesHero />
+      <PageHero
+        eyebrow="Precision Laser Solutions"
+        title="Our"
+        highlight="Products"
+        description="We help manufacturers, workshops and jewellers cut, engrave and mark with confidence, with the right laser machine and the support to keep it running."
+        bannerImage="/all_products_bann.png"
+      />
       <ProductCatalogue />
       <ContactStrip />
     </div>

@@ -24,7 +24,7 @@ export default function CTA() {
     <section
       id="contact"
       ref={ref}
-      className="relative mt-10 mb-6 overflow-hidden bg-gradient-to-r from-[#051540] via-[#0a2f86] to-[#0b5bf5]"
+      className="relative mt-10 overflow-hidden bg-gradient-to-r from-[#051540] via-[#0a2f86] to-[#0b5bf5]"
     >
       <motion.div style={{ y: bgY }} className="pointer-events-none absolute inset-0">
         <svg

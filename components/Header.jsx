@@ -9,18 +9,17 @@ import Magnetic from "./ui/Magnetic";
 const nav = [
   { label: "Home", href: "/" },
   {
-    label: "Machines",
-    href: "/machines",
+    label: "Products",
+    href: "/products",
     children: [
+      "Laser Cutting Machines",
       "Fiber Laser Cutting",
-      "Tube Laser Cutting",
-      "Sheet Metal Laser Cutter",
-      "Laser Welding",
-      "Laser Marking",
+      "Laser Engraving Machines",
+      "Laser Marking Machines",
     ],
   },
-  { label: "About Us", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 function WhatsAppIcon({ size = 18 }) {
