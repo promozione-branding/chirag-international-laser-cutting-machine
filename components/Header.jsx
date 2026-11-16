@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import Logo from "./art/Logo";
 import Magnetic from "./ui/Magnetic";
 
 const nav = [
-  { label: "Home", href: "#" },
+  { label: "Home", href: "/" },
   {
     label: "Machines",
     href: "/machines",
@@ -18,8 +19,8 @@ const nav = [
       "Laser Marking",
     ],
   },
-  { label: "About Us", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "About Us", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 function WhatsAppIcon({ size = 18 }) {
@@ -34,6 +35,8 @@ export default function Header() {
   const [open, setOpen] = useState(null);
   const [mobile, setMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isActive = (href) => !href.includes("#") && pathname === href;
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 12));
@@ -50,7 +53,7 @@ export default function Header() {
         <Logo />
 
         <nav className="hidden items-center gap-7 lg:flex">
-          {nav.map((item, i) => (
+          {nav.map((item) => (
             <div
               key={item.label}
               className="relative"
@@ -60,7 +63,7 @@ export default function Header() {
               <a
                 href={item.href}
                 className={`group relative flex items-center gap-1 py-6 text-[13px] font-medium transition-colors hover:text-brand ${
-                  i === 0 ? "text-brand" : "text-ink"
+                  isActive(item.href) ? "text-brand" : "text-ink"
                 }`}
               >
                 {item.label}
@@ -72,7 +75,7 @@ export default function Header() {
                     }`}
                   />
                 )}
-                {i === 0 ? (
+                {isActive(item.href) ? (
                   <motion.span
                     layoutId="nav-underline"
                     className="absolute inset-x-0 bottom-3 h-[2px] rounded-full bg-brand"
@@ -120,7 +123,7 @@ export default function Header() {
 </a>
 
           <Magnetic strength={0.25} className="hidden sm:inline-block">
-            <a href="#contact" className="btn-primary !py-2.5 !text-[13px]">
+            <a href="/#contact" className="btn-primary !py-2.5 !text-[13px]">
               Get a Quote <ArrowUpRight size={14} />
             </a>
           </Magnetic>
@@ -154,7 +157,7 @@ export default function Header() {
                   {n.label}
                 </a>
               ))}
-              <a href="#contact" className="btn-primary mt-2 justify-center">
+              <a href="/#contact" className="btn-primary mt-2 justify-center">
                 Get a Quote <ArrowUpRight size={14} />
               </a>
             </div>
