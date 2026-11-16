@@ -1,13 +1,37 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import { formatPrice } from "@/lib/products";
 
 export default function ProductCard({ product }) {
+  // Optional hover preview: only products with a `video` field get one.
+  const videoRef = useRef(null);
+  const hasVideo = Boolean(product.video);
+
+  const playVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {});
+  };
+
+  const stopVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    video.currentTime = 0;
+  };
+
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#e0e9f5] bg-white shadow-[0_5px_18px_rgba(18,55,105,0.035)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#b8d2f7] hover:shadow-[0_18px_38px_rgba(20,75,150,0.11)]">
       <Link
         href={product.source}
         target="_blank"
+        onMouseEnter={hasVideo ? playVideo : undefined}
+        onMouseLeave={hasVideo ? stopVideo : undefined}
+        onFocus={hasVideo ? playVideo : undefined}
+        onBlur={hasVideo ? stopVideo : undefined}
         className="relative block h-[220px] overflow-hidden bg-[linear-gradient(145deg,#f5f9ff,#edf4ff)] p-5"
       >
         <span className="absolute left-4 top-4 z-10 rounded-full border border-[#d9e8ff] bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1764cf]">
@@ -17,16 +41,32 @@ export default function ProductCard({ product }) {
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.045]"
+          className={`h-full w-full object-contain transition-transform duration-500 ${
+            hasVideo ? "" : "group-hover:scale-[1.045]"
+          }`}
           onError={(event) => {
             event.currentTarget.style.opacity = "0";
           }}
         />
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <span className="rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-[#0758c9] shadow-lg">
-            View product <ArrowRight className="ml-1 inline" size={13} />
-          </span>
-        </div>
+        {hasVideo ? (
+          <video
+            ref={videoRef}
+            src={product.video}
+            poster={product.image}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
+          />
+        ) : (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <span className="rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-[#0758c9] shadow-lg">
+              View product <ArrowRight className="ml-1 inline" size={13} />
+            </span>
+          </div>
+        )}
       </Link>
 
       <div className="flex flex-1 flex-col px-5 pb-5 pt-4">

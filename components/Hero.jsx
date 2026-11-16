@@ -178,7 +178,7 @@ export default function Hero() {
             </Magnetic>
 
             <Magnetic>
-              <a
+              {/* <a
                 href="#about"
                 className="btn-outline inline-flex items-center gap-3 !border-white/60 !text-white hover:!bg-white hover:!text-[#03152f]"
               >
@@ -186,7 +186,7 @@ export default function Hero() {
                   <Play size={10} fill="currentColor" />
                 </span>
                 Watch Video
-              </a>
+              </a> */}
             </Magnetic>
           </motion.div>
 
