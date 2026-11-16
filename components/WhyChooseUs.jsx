@@ -85,7 +85,6 @@ function Connector({ side, index, reduce }) {
         viewport={{ once: true }}
         transition={{ duration: 1, delay: 0.5 + index * 0.1, ease: "easeOut" }}
       />
-      {/* pulsing halo */}
       <motion.circle
         cx="8"
         cy="14"
@@ -95,7 +94,6 @@ function Connector({ side, index, reduce }) {
         transition={{ duration: 2.4, repeat: Infinity, delay: index * 0.3 }}
       />
       <circle cx="8" cy="14" r="5" fill="#1a66ff" />
-      {/* travelling energy pulse */}
       {!reduce && (
         <motion.circle
           r="2.6"
@@ -132,7 +130,6 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
       >
         <Connector side={side} index={index} reduce={reduce} />
 
-        {/* slanted glass plate */}
         <div
           className={`relative -skew-x-[8deg] overflow-hidden rounded-[28px] ring-1 backdrop-blur transition-all duration-500 ${
             active
@@ -140,7 +137,6 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
               : "bg-white/75 shadow-[0_22px_50px_-26px_rgba(37,99,235,0.35)] ring-white"
           }`}
         >
-          {/* shine sweep when this card becomes active */}
           {active && (
             <motion.span
               key={`shine-${index}`}
@@ -152,7 +148,6 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
             />
           )}
 
-          {/* un-slant the content */}
           <div className="relative flex skew-x-[8deg] items-center gap-5 px-7 py-5 sm:gap-6">
             <motion.div
               animate={
@@ -170,7 +165,6 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
               <Icon size={38} strokeWidth={1.7} />
             </motion.div>
 
-            {/* divider grows in */}
             <motion.span
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
@@ -227,7 +221,6 @@ function Portal({ reduce }) {
       transition={{ duration: 1.2, ease: EASE }}
       className="relative mx-auto h-[400px] w-[340px] sm:h-[500px] sm:w-[420px] lg:h-[560px] lg:w-[460px]"
     >
-      {/* floor glow + rippling rings */}
       <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[150%] -translate-x-1/2 rounded-[50%] border border-[#cfe0ff] bg-[radial-gradient(ellipse_at_center,rgba(59,139,255,0.25),transparent_70%)]" />
       <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[115%] -translate-x-1/2 rounded-[50%] border border-[#b9d3ff]/80" />
       {!reduce &&
@@ -241,14 +234,12 @@ function Portal({ reduce }) {
           </span>
         ))}
 
-      {/* ring + photo */}
       <div className="absolute left-1/2 top-0 aspect-square w-[88%] -translate-x-1/2">
         <motion.div
           className="relative h-full w-full"
           animate={reduce ? undefined : { y: [0, -12, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
-          {/* breathing glow */}
           <motion.div
             aria-hidden
             className="absolute -inset-[14%] rounded-full bg-[radial-gradient(circle,rgba(59,139,255,0.45),transparent_65%)]"
@@ -256,7 +247,6 @@ function Portal({ reduce }) {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* spinning arc accent */}
           <motion.svg
             aria-hidden
             viewBox="0 0 100 100"
@@ -275,7 +265,6 @@ function Portal({ reduce }) {
 
 
 
-          {/* orbiting light */}
           <motion.div
             aria-hidden
             className="absolute -inset-[7%]"
@@ -298,7 +287,6 @@ function Portal({ reduce }) {
                   transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
                 />
               )}
-              {/* light sweep across the photo */}
               {!reduce && (
                 <motion.span
                   aria-hidden
@@ -313,7 +301,6 @@ function Portal({ reduce }) {
         </motion.div>
       </div>
 
-      {/* podium (glow pulses) */}
       <motion.div
         className="absolute bottom-[26px] left-1/2 h-[56px] w-[84%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-white via-[#dbe9ff] to-[#8fb8ff]"
         animate={
@@ -331,7 +318,6 @@ function Portal({ reduce }) {
       />
       <div className="absolute bottom-[44px] left-1/2 h-[34px] w-[78%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#f4f8ff] to-[#cfe0ff]" />
 
-      {/* sparks rising off the podium */}
       {!reduce &&
         sparks.map((s, i) => (
           <motion.span
@@ -366,7 +352,6 @@ export default function WhyChooseUs() {
       style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
       className="relative overflow-hidden bg-gradient-to-b from-[#f4f8ff] via-[#eaf2ff] to-[#e3edff] py-16"
     >
-      {/* soft swoosh backgrounds – slow drift */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute -left-40 -top-24 h-[420px] w-[520px] rounded-[50%] bg-[#d6e5ff]/70 blur-2xl"
@@ -382,7 +367,6 @@ export default function WhyChooseUs() {
       />
 
       <div className="relative mx-auto w-full max-w-[1800px] px-4 lg:px-10">
-        {/* header */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-4">
             <motion.span
@@ -420,7 +404,6 @@ export default function WhyChooseUs() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
               >
-                {/* shimmering gradient text */}
                 <motion.span
                   className="inline-block bg-clip-text text-transparent"
                   style={{
@@ -447,7 +430,6 @@ export default function WhyChooseUs() {
           </motion.p>
         </div>
 
-        {/* feature cards around the portal */}
         <div
           className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_460px_minmax(0,1fr)] lg:gap-16"
           onMouseEnter={() => setPaused(true)}

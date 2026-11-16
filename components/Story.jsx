@@ -26,7 +26,6 @@ export default function Story() {
   const lineScale = useSpring(tlP, { stiffness: 110, damping: 24 });
   return (
     <section id="story" ref={secRef} className="relative py-16">
-      {/* background line that connects the journey */}
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full"
         viewBox="0 0 1440 520"
@@ -69,7 +68,6 @@ export default function Story() {
           </Magnetic>
         </div>
 
-        {/* parallax building */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -83,7 +81,6 @@ export default function Story() {
           </motion.div>
         </motion.div>
 
-        {/* timeline */}
         <div ref={tlRef} className="relative pl-8">
           <div className="absolute bottom-1 left-[5px] top-2 w-[2px] rounded bg-brand/15" />
           <motion.div

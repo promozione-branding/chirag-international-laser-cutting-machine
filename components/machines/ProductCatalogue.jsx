@@ -81,7 +81,6 @@ export default function ProductCatalogue() {
         </aside>
 
         <div className="min-w-0">
-          {/* Mobile filters toggle */}
           <div className="mb-5 lg:hidden">
             <button
               type="button"
@@ -148,7 +147,6 @@ export default function ProductCatalogue() {
             </div>
           </div>
 
-          {/* ACTIVE FILTER CHIPS */}
           {(activeCategory !== "all" ||
             selectedFeatures.length > 0 ||
             searchTerm) && (

@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import Magnetic from "./ui/Magnetic";
 
-// Animated heading letters
 function MagneticLetter({ char, color, index }) {
   return (
     <motion.span
@@ -61,18 +60,11 @@ function mix(from, to, t) {
   return `rgb(${ch(16)}, ${ch(8)}, ${ch(0)})`;
 }
 
-// const stats = [
-//   { icon: Target, top: "±0.01 mm", bottom: "Cutting Accuracy" },
-//   { icon: Zap, top: "3×", bottom: "Faster Production" },
-//   { icon: Layers, top: "Multi-Material", bottom: "Cutting" },
-//   { icon: Headphones, top: "24/7", bottom: "Support" },
-// ];
 
 export default function Hero() {
   return (
     <section className="relative isolate min-h-[720px] overflow-hidden bg-[#03152f] lg:min-h-[780px]">
 
-      {/* STATIC HERO BACKGROUND IMAGE */}
       <div
         className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
         style={{
@@ -80,16 +72,12 @@ export default function Hero() {
         }}
       />
 
-      {/* Dark gradient overlay for text readability */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#03152f]/95 via-[#03152f]/75 to-[#03152f]/5" />
 
-      {/* Additional bottom gradient */}
       <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#03152f]/50 to-transparent" />
 
-      {/* HERO CONTENT */}
       <div className="container-x relative grid min-h-[720px] items-center gap-10 py-24 lg:min-h-[780px] lg:grid-cols-[1fr_1fr] lg:py-32">
 
-        {/* LEFT CONTENT */}
         <div className="relative z-10 max-w-[600px]">
 
           <motion.div
@@ -103,7 +91,6 @@ export default function Hero() {
             Reliability
           </motion.div>
 
-          {/* HEADING */}
           <h1 className="mt-7 text-[46px] font-black leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-[76px]">
             {lines.map((line, li) => {
               let counter = lines
@@ -149,7 +136,6 @@ export default function Hero() {
             })}
           </h1>
 
-          {/* DESCRIPTION */}
           <motion.p
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
@@ -160,7 +146,6 @@ export default function Hero() {
             sheet cutting and industrial applications.
           </motion.p>
 
-          {/* BUTTONS */}
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
@@ -190,7 +175,6 @@ export default function Hero() {
             </Magnetic>
           </motion.div>
 
-          {/* STATS */}
           {/* <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
             {stats.map(({ icon: Icon, top, bottom }, i) => (
               <motion.div

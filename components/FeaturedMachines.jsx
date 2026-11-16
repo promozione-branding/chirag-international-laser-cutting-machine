@@ -85,10 +85,8 @@ export default function FeaturedMachines() {
     >
       <div className="container-x">
 
-        {/* MAIN SHOWCASE */}
         <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0a2a73] via-[#082159] to-[#051540] px-5 py-12 shadow-[0_30px_70px_-30px_rgba(5,20,63,0.5)] sm:rounded-[32px] sm:px-10 sm:py-16">
 
-          {/* Static background grid */}
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.06]"
             style={{
@@ -98,12 +96,10 @@ export default function FeaturedMachines() {
             }}
           />
 
-          {/* Static blue glow */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-[100px]" />
 
           <div className="relative grid items-center gap-10 lg:grid-cols-[0.85fr_1.5fr_0.85fr] lg:gap-8">
 
-            {/* LEFT CONTENT */}
             <div className="relative z-10">
 
               <div className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-300">
@@ -132,10 +128,8 @@ export default function FeaturedMachines() {
 
             </div>
 
-            {/* CENTER MACHINE IMAGE SLIDER */}
             <div className="relative min-w-0">
 
-              {/* Static image background */}
               <div className="absolute inset-x-[8%] top-[10%] bottom-[10%] rounded-full bg-blue-400/10 blur-3xl" />
 
               <div className="relative h-[280px] sm:h-[380px] lg:h-[420px]">
@@ -177,7 +171,6 @@ export default function FeaturedMachines() {
 
               </div>
 
-              {/* SLIDER PAGINATION */}
               <div className="relative z-10 mt-2 flex justify-center gap-2">
                 {machines.map((item, index) => (
                   <button
@@ -195,7 +188,6 @@ export default function FeaturedMachines() {
 
             </div>
 
-            {/* RIGHT MACHINE INFORMATION */}
             <div className="relative z-10 min-h-[260px]">
 
               <div

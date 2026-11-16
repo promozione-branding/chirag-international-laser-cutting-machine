@@ -58,7 +58,6 @@ const stats = [
 export default function About() {
   const reduce = useReducedMotion();
 
-  // gentle endless float for the cards (disabled if user prefers reduced motion)
   const float = (amp, dur, delay = 0) =>
     reduce
       ? {}
@@ -83,7 +82,6 @@ export default function About() {
           "linear-gradient(135deg,#f7faff 0%,#ebf2ff 50%,#e1eaff 100%)",
       }}
     >
-      {/* decoration */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div
           className="absolute -top-8 right-[9%] hidden h-[330px] w-[20%] lg:block"
@@ -98,9 +96,7 @@ export default function About() {
       </div>
 
       <div className="mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10">
-        {/* TOP ROW */}
         <div className="relative lg:min-h-[400px]">
-          {/* ================= LEFT: slides in from the left ================= */}
           <div className="relative z-10 max-w-[560px] lg:max-w-[52%]">
             <motion.div
               initial={{ opacity: 0, x: -70 }}
@@ -162,7 +158,6 @@ export default function About() {
                 >
                   {i > 0 && <span className="mx-4 hidden h-[44px] w-px sm:block" style={{ background: LINE }} />}
                   <div className="group flex items-center gap-3">
-                    {/* card: floats gently + lifts on hover */}
                     <motion.span
                       animate={reduce ? undefined : { y: [0, -4, 0] }}
                       transition={reduce ? undefined : { duration: 3.2 + i * 0.5, delay: i * 0.4, repeat: Infinity, ease: "easeInOut" }}
@@ -207,7 +202,6 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* ================= RIGHT: slides in from the right ================= */}
           <motion.div
             initial={{ opacity: 0, x: 140 }}
             whileInView={{ opacity: 1, x: 0 }}

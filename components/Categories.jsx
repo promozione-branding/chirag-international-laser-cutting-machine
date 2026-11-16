@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Crosshair, Flame, Layers, PenTool, Scissors } from "lucide-react";
 import MachineArt from "./art/MachineArt";
 
-// CO2 cloud icon, drawn inline
 function Co2Icon({ size = 28, strokeWidth = 2 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth={strokeWidth + 0.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -55,28 +54,22 @@ function FeaturedCard({ cat, index, total, onSelect, onPause }) {
       onMouseLeave={() => onPause(false)}
       className="group relative block h-[520px] w-full lg:h-full lg:min-h-[540px]"
     >
-      {/* glow behind the card */}
       <span aria-hidden className="absolute inset-2 rounded-[40px] bg-[#2f7bff]/40 blur-2xl" />
 
-      {/* slanted shell (light-blue rim) */}
       <div
         className="absolute inset-0 -skew-x-[4deg] rounded-[40px] bg-gradient-to-br from-[#6cb4ff] via-[#2f86ff] to-[#7cc4ff] p-[7px] shadow-[0_30px_70px_-20px_rgba(10,80,220,0.6)]"
       >
-        {/* inner dark-blue panel */}
         <div className="relative h-full w-full overflow-hidden rounded-[34px] bg-gradient-to-br from-[#0a5fe0] via-[#0645b8] to-[#03287a]">
-          {/* diagonal light streak */}
           <span
             aria-hidden
             className="pointer-events-none absolute -right-10 -top-10 h-[130%] w-1/2 rotate-[28deg] bg-gradient-to-b from-white/20 via-white/5 to-transparent"
           />
-          {/* glowing floor rings under the machine */}
           <span aria-hidden className="pointer-events-none absolute bottom-[70px] left-1/2 h-[120px] w-[110%] -translate-x-1/2 rounded-[50%] border-2 border-[#6fc2ff]/70 shadow-[0_0_40px_rgba(90,180,255,0.8),inset_0_0_30px_rgba(90,180,255,0.5)]" />
           <span aria-hidden className="pointer-events-none absolute bottom-[90px] left-1/2 h-[80px] w-[85%] -translate-x-1/2 rounded-[50%] border border-[#9ad8ff]/60" />
           <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-1/3 w-full bg-gradient-to-t from-[#0a8bff]/30 to-transparent" />
         </div>
       </div>
 
-      {/* content (un-slanted so text stays upright) */}
       <div className="relative flex h-full w-full flex-col p-7 pl-9 text-white">
         <AnimatePresence mode="wait">
           <motion.div
@@ -169,9 +162,6 @@ function SmallCard({ cat }) {
 }
 
 export default function Categories() {
-  // `active` is the index (in `cats`) shown in the big card.
-  // `slots` is the fixed-position list shown in the grid: when a category is
-  // promoted to the big card, the previous big card takes its slot in the grid.
   const [active, setActive] = useState(0);
   const [slots, setSlots] = useState(() => cats.map((_, i) => i).slice(1));
   const [paused, setPaused] = useState(false);
@@ -182,12 +172,11 @@ export default function Categories() {
     setActive(next);
   };
 
-  // show every category one by one
   useEffect(() => {
     if (paused) return;
     const id = setInterval(() => select((active + 1) % cats.length), 3500);
     return () => clearInterval(id);
-  }, [active, paused]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [active, paused]); 
 
   const featured = cats[active];
 
@@ -197,12 +186,10 @@ export default function Categories() {
       style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
       className="relative overflow-hidden bg-gradient-to-b from-[#f9fbff] via-[#f1f6ff] to-[#e9f1ff] pb-24 pt-14"
     >
-      {/* soft blobs */}
       <div aria-hidden className="pointer-events-none absolute -left-40 top-0 h-[420px] w-[420px] rounded-full bg-[#dbe8ff]/60 blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute -right-40 top-10 h-[420px] w-[520px] rounded-full bg-[#cfe0ff]/60 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-[1800px] px-4 lg:px-10">
-        {/* centered header */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-4">
             <span className="h-[3px] w-12 rounded-full bg-[#1559e6]" />
@@ -220,7 +207,6 @@ export default function Categories() {
           </p>
         </div>
 
-        {/* featured + grid */}
         <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] lg:gap-10">
           <div className="lg:pr-4">
             <FeaturedCard
@@ -239,7 +225,6 @@ export default function Categories() {
         </div>
       </div>
 
-      {/* soft blue waves along the bottom */}
       <svg
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32 w-full"

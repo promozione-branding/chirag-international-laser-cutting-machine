@@ -6,7 +6,6 @@ import { ArrowRight, Check, Mail } from "lucide-react";
 import { formatPrice } from "@/lib/products";
 
 export default function ProductCard({ product }) {
-  // Optional hover preview: only products with a `video` field get one.
   const videoRef = useRef(null);
   const hasVideo = Boolean(product.video);
 

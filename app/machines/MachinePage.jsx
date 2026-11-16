@@ -480,7 +480,6 @@ export default function MachinePage() {
 
   return (
     <main className="min-h-screen bg-[#f8faff] text-[#101d3d]">
-      {/* HERO */}
       <section className="relative isolate overflow-hidden border-b border-[#e6eef9] bg-[#eaf2ff]">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.95),transparent_42%),linear-gradient(110deg,#f7faff_0%,#e8f1ff_52%,#d9e9ff_100%)]" />
         <div className="mx-auto grid min-h-[265px] max-w-[1440px] items-center gap-6 px-5 py-9 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-0">
@@ -535,10 +534,8 @@ export default function MachinePage() {
         </div>
       </section>
 
-      {/* CATALOGUE */}
       <section className="mx-auto max-w-[1440px] px-5 py-9 sm:px-8 sm:py-12 lg:px-10 lg:py-14">
         <div className="grid items-start gap-7 lg:grid-cols-[260px_minmax(0,1fr)] xl:gap-8">
-          {/* DESKTOP FILTER SIDEBAR */}
           <aside className="hidden space-y-5 lg:block">
             <div className="rounded-[15px] border border-[#dce6f2] bg-white p-4 shadow-[0_5px_20px_rgba(20,55,100,0.035)]">
               <h2 className="mb-4 flex items-center gap-3 text-[15px] font-extrabold text-[#14264b]">
@@ -624,7 +621,6 @@ export default function MachinePage() {
             </div>
           </aside>
 
-          {/* PRODUCT RESULTS */}
           <div className="min-w-0">
             <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div>
@@ -673,7 +669,6 @@ export default function MachinePage() {
               </div>
             </div>
 
-            {/* ACTIVE FILTER CHIPS */}
             {(activeCategory !== "all" ||
               selectedFeatures.length > 0 ||
               searchTerm) && (
@@ -758,7 +753,6 @@ export default function MachinePage() {
         </div>
       </section>
 
-      {/* BOTTOM CONTACT STRIP */}
       <section className="relative overflow-hidden bg-[linear-gradient(105deg,#073b91,#075bd5_55%,#0866f5)]">
         <div className="pointer-events-none absolute -left-12 -top-24 h-64 w-64 rounded-full border border-white/10" />
         <div className="pointer-events-none absolute -right-16 -bottom-36 h-80 w-80 rounded-full border border-white/10" />

@@ -38,14 +38,11 @@ export default function BuildingArt({ className = "" }) {
       <ellipse cx="90" cy="60" rx="70" ry="16" fill="#fff" opacity=".7" />
       <ellipse cx="420" cy="40" rx="60" ry="12" fill="#fff" opacity=".6" />
 
-      {/* main glass block */}
       <polygon points="40,48 372,70 372,232 40,222" fill="url(#bgFront)" />
       <g>{windows}</g>
-      {/* white side wing */}
       <polygon points="372,70 490,96 490,214 372,232" fill="url(#bgSide)" />
       <polygon points="372,70 490,96 490,104 372,80" fill="#fff" />
       <path d="M392 112 L476 128 M392 142 L476 158 M392 172 L476 188" stroke="#aebfd8" strokeWidth="3" />
-      {/* signage */}
       <rect x="56" y="22" width="150" height="26" rx="3" fill="#fff" opacity=".95" transform="skewY(3)" />
       <text
         x="70"
@@ -58,10 +55,8 @@ export default function BuildingArt({ className = "" }) {
       >
         Ci laser
       </text>
-      {/* ground */}
       <polygon points="0,226 520,236 520,300 0,300" fill="#dfe7f2" />
       <polygon points="0,248 520,256 520,266 0,258" fill="#c9d4e4" />
-      {/* trees */}
       {[24, 470, 500].map((x, i) => (
         <g key={x}>
           <rect x={x - 2} y={212 + i * 2} width="4" height="22" fill="#5b6b52" />
@@ -69,7 +64,6 @@ export default function BuildingArt({ className = "" }) {
           <circle cx={x - 8} cy={212 + i * 2} r="11" fill="#5fb070" />
         </g>
       ))}
-      {/* entrance */}
       <rect x="170" y="196" width="70" height="28" fill="#0a2f86" opacity=".85" />
       <rect x="174" y="200" width="30" height="24" fill="#9ec6ff" opacity=".7" />
       <rect x="208" y="200" width="28" height="24" fill="#9ec6ff" opacity=".7" />

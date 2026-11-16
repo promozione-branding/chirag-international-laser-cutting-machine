@@ -26,7 +26,6 @@ export default function CTA() {
       ref={ref}
       className="relative mt-10 mb-6 overflow-hidden bg-gradient-to-r from-[#051540] via-[#0a2f86] to-[#0b5bf5]"
     >
-      {/* parallax depth layers */}
       <motion.div style={{ y: bgY }} className="pointer-events-none absolute inset-0">
         <svg
           className="h-full w-full"
@@ -71,13 +70,11 @@ export default function CTA() {
         ))}
       </motion.div>
 
-      {/* laser head on the left */}
       <div className="pointer-events-none absolute -left-10 -top-16 hidden h-[340px] w-[440px] opacity-95 md:block">
         <LaserNozzle className="absolute inset-0 h-full w-full" />
         <LaserSparks className="absolute inset-0 h-full w-full" />
       </div>
 
-      {/* spark trail travelling from the laser head to the button */}
       <svg
         className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
         viewBox="0 0 1440 260"
