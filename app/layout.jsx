@@ -1,5 +1,7 @@
 import "./globals.css";
 import SmoothScroll from "../components/SmoothScroll";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Ci Laser | Next-Gen Laser Cutting Solutions",
@@ -11,7 +13,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <Header />
         <SmoothScroll>{children}</SmoothScroll>
+        <Footer/>
       </body>
     </html>
   );
