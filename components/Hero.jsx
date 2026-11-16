@@ -169,7 +169,7 @@ export default function Hero() {
           >
             <Magnetic>
               <a
-                href="#machines"
+                href="/machines"
                 className="btn-primary inline-flex items-center gap-3"
               >
                 Explore Machines
@@ -223,7 +223,7 @@ export default function Hero() {
         </div>
 
         <a
-          href="#machines"
+          href="/machines"
           className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] tracking-widest text-white/70 lg:flex"
         >
           <span className="grid h-10 w-10 animate-bounce place-items-center rounded-full border border-white/30 bg-white/10 backdrop-blur-md">

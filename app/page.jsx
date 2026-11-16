@@ -17,9 +17,9 @@ export default function Home() {
       <main>
         <Hero />
         <Categories />
+        <FeaturedMachines />
         <About />
         <WhyChooseUs />
-        <FeaturedMachines />
         <Story />
         <Testimonials />
         <FAQ />

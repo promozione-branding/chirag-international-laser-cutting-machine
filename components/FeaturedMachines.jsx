@@ -1,242 +1,264 @@
 "use client";
+
 import { useRef, useState } from "react";
-import { AnimatePresence, animate, motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { ArrowRight, ArrowLeft, Check } from "lucide-react";
-import MachineArt from "./art/MachineArt";
+
+import {
+  ArrowRight,
+  ArrowLeft,
+  Check,
+} from "lucide-react";
+
 import Magnetic from "./ui/Magnetic";
 
-// Source: https://www.chiragint.in/ (Chirag International)
 const machines = [
   {
-    name: "Fiber Laser Steel Cutting Machine",
+    name: "Fiber Laser Cutters",
     badge: "Fiber Cutting",
+    price: "₹ 18,00,000 / Piece",
+    image: "/machines/fiber-laser-cutters_transparent.png",
+    feats: [
+      "Working Area: 3000 × 1500 mm",
+      "Laser Power: 1000 W",
+      "Cuts SS, MS, Aluminium, Brass & more",
+    ],
+  },
+  {
+    name: "Fiber Laser Steel Cutting Machine",
+    badge: "Steel Cutting",
     price: "₹ 25,00,000 / Piece",
-    feats: ["Working Area: 3000 × 1500 mm", "Fully Automatic", "Max Cutting Thickness: SS 8 mm"],
-    variant: "fiber",
-  },
-  {
-    name: "Metal Laser Cutting Machine",
-    badge: "Metal Cutting",
-    price: "₹ 30,00,000 / Piece",
-    feats: ["Fiber Laser Metal Cutting", "Laser Power: 1.5 kW", "Working Area: 3000 × 1500 mm"],
-    variant: "sheet",
-  },
-  {
-    name: "Small Metal Laser Cutting Machine",
-    badge: "Compact",
-    price: "₹ 7,00,000 / Piece",
-    feats: ["Working Area: 3000 × 1500 mm", "Mild Steel, Gold & Silver", "2 Years Warranty"],
-    variant: "sheet",
-  },
-  {
-    name: "Tube Laser Cutting Machine",
-    badge: "Tube Cutting",
-    price: "₹ 34,00,000 / Piece",
-    feats: ["Max Tube Diameter: 200 mm", "Laser Metal Cutting", "Working Area: 3000 × 1500 mm"],
-    variant: "tube",
-  },
-  {
-    name: "Laser Welding Machine",
-    badge: "Welding",
-    price: "₹ 5,70,000 / Piece",
-    feats: ["Automatic Grade", "Current: 25 A", "Metal Welding Machinery"],
-    variant: "welding",
+    image: "/machines/fiber-laser-steel_transparent.png",
+    feats: [
+      "Working Area: 3000 × 1500 mm",
+      "Fully Automatic",
+      "Max Cutting Thickness: SS 8 mm",
+    ],
   },
   {
     name: "CO2 Laser Marking Machine",
     badge: "Marking",
     price: "₹ 4,50,000 / Unit",
-    feats: ["CO2 Laser Type", "Marking Speed: 7000 mm/s", "Etching on Wood"],
-    variant: "fiber",
+    image: "/machines/co2-laser-marking_transparent.png",
+    feats: [
+      "Marking Speed: 7000 mm/s",
+      "CO2 Laser Type",
+      "Marking Area: 400 × 400 mm",
+    ],
   },
   {
-    name: "Jewellery Laser Engraver",
-    badge: "Engraving",
-    price: "₹ 1,85,000 / Piece",
-    feats: ["Jewellery Engraving Machine", "Power: 30 W", "Electric Power Type"],
-    variant: "welding",
+    name: "CO2 Laser Leather Cutting Machine",
+    badge: "Non-Metal Cutting",
+    price: "₹ 3,10,000 / Piece",
+    image: "/machines/co2-leather-cutting_transparent.png",
+    feats: [
+      "Laser Power: 100 W",
+      "Cutting Speed: 8000 mm/s",
+      "Ideal for Leather, Acrylic, MDF & Paper",
+    ],
+  },
+  {
+    name: "Laser Jewellery Hallmarking System",
+    badge: "Laser Hallmarking machine",
+    price: "₹ 1,60,000 / Piece",
+    image: "/machines/jewellery-laser-engraver_transparent.png",
+    feats: [
+      "Power: 20 W",
+      "High Precision Jewellery Engraving",
+      "Automatic Operation",
+    ],
   },
 ];
-const blueprints = [
-  { cls: "left-[4%] top-[6%] h-20 w-28", d: 0, v: "fiber" },
-  { cls: "right-[8%] top-[2%] h-24 w-32", d: 1.2, v: "sheet" },
-  { cls: "left-[24%] bottom-[22%] h-16 w-24", d: 2.1, v: "tube" },
-];
+
 export default function FeaturedMachines() {
-  const wrapRef = useRef(null);
   const swiper = useRef(null);
   const [active, setActive] = useState(0);
-  // Section is pinned (sticky) while scroll progress scrubs the 3D rotation
-  const { scrollYProgress } = useScroll({ target: wrapRef, offset: ["start start", "end end"] });
-  const scrubRot = useTransform(scrollYProgress, [0, 1], [-38, 38]);
-  const scrubTilt = useTransform(scrollYProgress, [0, 1], [10, -6]);
-  const spin = useMotionValue(0);
-  const rotateY = useTransform([scrubRot, spin], ([a, b]) => a + b);
-  const layerY = useTransform(scrollYProgress, [0, 1], [30, -50]);
-  const layerY2 = useTransform(scrollYProgress, [0, 1], [-10, 60]);
-  const glowScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.85, 1.15, 0.9]);
-  const m = machines[active];
+
+  const machine = machines[active];
+
   return (
-    <section id="featured" ref={wrapRef} className="relative lg:h-[170vh]">
-      <div className="py-8 lg:sticky lg:top-[84px]">
-        <div className="container-x">
-          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0a2a73] via-[#082159] to-[#051540] px-6 py-10 shadow-[0_40px_80px_-30px_rgba(5,20,63,0.8)] sm:px-10">
-            {/* faint grid */}
-            <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:36px_36px]" />
+    <section
+      id="featured"
+      className="relative overflow-hidden py-20 sm:py-24 lg:py-28"
+    >
+      <div className="container-x">
 
-            {/* floating blueprint layers */}
-            {blueprints.map((b, i) => (
-              <motion.div
-                key={i}
-                style={{ y: i % 2 ? layerY : layerY2 }}
-                className={`pointer-events-none absolute ${b.cls}`}
-              >
-                <motion.div
-                  animate={{ y: [0, -12, 0], rotate: [0, 2, 0] }}
-                  transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: b.d }}
-                  className="glass-dark h-full w-full rounded-lg p-2 opacity-60"
-                >
-                  <MachineArt
-                    variant={b.v}
-                    className="h-full w-full opacity-70 [filter:invert(1)_hue-rotate(180deg)_brightness(1.4)]"
-                  />
-                </motion.div>
-              </motion.div>
-            ))}
+        {/* MAIN SHOWCASE */}
+        <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0a2a73] via-[#082159] to-[#051540] px-5 py-12 shadow-[0_30px_70px_-30px_rgba(5,20,63,0.5)] sm:rounded-[32px] sm:px-10 sm:py-16">
 
-            <div className="relative grid items-center gap-8 lg:grid-cols-[0.85fr_1.5fr_0.85fr]">
-              {/* left */}
-              <div className="z-10">
-                <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-200">
-                  Featured Machines
-                </div>
-                <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-[34px]">
-                  Our High-Performance Machines
-                </h2>
-                <p className="mt-3 max-w-xs text-[13px] leading-relaxed text-white/70">
-                  Explore our most popular laser cutting, welding, marking and engraving machines designed for
-                  precision, speed, and long-term performance.
-                </p>
-                <Magnetic className="mt-6">
-                  <a
-                    href="#machines"
-                    className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-5 py-2.5 text-[13px] font-semibold text-white shadow-glow transition-colors hover:bg-brand-400"
-                  >
-                    View All Machines <ArrowRight size={14} />
-                  </a>
-                </Magnetic>
+          {/* Static background grid */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+              backgroundSize: "36px 36px",
+            }}
+          />
+
+          {/* Static blue glow */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-[100px]" />
+
+          <div className="relative grid items-center gap-10 lg:grid-cols-[0.85fr_1.5fr_0.85fr] lg:gap-8">
+
+            {/* LEFT CONTENT */}
+            <div className="relative z-10">
+
+              <div className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-300">
+                Featured Machines
               </div>
 
-              {/* center: spotlight platform + rotating machine */}
-              <div
-                className="relative h-[300px] sm:h-[360px]"
-                onMouseEnter={() =>
-                  animate(spin, spin.get() + 360, { duration: 1.6, ease: [0.65, 0, 0.35, 1] })
-                }
-              >
-                {/* spotlight beam */}
-                <motion.div
-                  style={{ scale: glowScale }}
-                  className="pointer-events-none absolute left-1/2 top-0 h-[75%] w-[70%] -translate-x-1/2 [clip-path:polygon(35%_0,65%_0,100%_100%,0_100%)] bg-gradient-to-b from-white/25 via-brand-400/10 to-transparent"
-                />
-                {/* platform */}
-                <div className="absolute inset-x-0 bottom-2 flex justify-center">
-                  <div className="relative h-24 w-[88%]">
-                    {[0, 1, 2].map((r) => (
-                      <motion.span
-                        key={r}
-                        className="absolute inset-0 rounded-[50%] border border-brand-400/60"
-                        animate={{ scale: [0.7, 1.08], opacity: [0.8, 0] }}
-                        transition={{ duration: 3, repeat: Infinity, delay: r, ease: "easeOut" }}
-                      />
-                    ))}
-                    <div className="absolute inset-x-[6%] inset-y-[18%] rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(76,141,255,0.75),rgba(11,91,245,0.15)_60%,transparent_72%)] shadow-[0_0_60px_10px_rgba(59,139,255,0.5)]" />
-                    <div className="absolute inset-x-[10%] inset-y-[26%] rounded-[50%] border-2 border-brand-400" />
-                  </div>
-                </div>
+              <h2 className="mt-4 text-3xl font-extrabold leading-tight text-white sm:text-[38px]">
+                Our High-Performance Machines
+              </h2>
+
+              <p className="mt-4 max-w-xs text-[14px] leading-[1.9] text-white/70">
+                Explore our most popular laser cutting, marking
+                and engraving machines designed for precision,
+                speed, and long-term performance.
+              </p>
+
+              <Magnetic className="mt-8">
+                <a
+                  href="/machines"
+                  className="inline-flex items-center gap-3 rounded-full bg-[#0866F5] px-6 py-3 text-[13px] font-semibold text-white shadow-lg shadow-blue-500/20 transition-colors hover:bg-blue-400"
+                >
+                  View All Machines
+                  <ArrowRight size={16} />
+                </a>
+              </Magnetic>
+
+            </div>
+
+            {/* CENTER MACHINE IMAGE SLIDER */}
+            <div className="relative min-w-0">
+
+              {/* Static image background */}
+              <div className="absolute inset-x-[8%] top-[10%] bottom-[10%] rounded-full bg-blue-400/10 blur-3xl" />
+
+              <div className="relative h-[280px] sm:h-[380px] lg:h-[420px]">
 
                 <Swiper
                   modules={[EffectFade]}
                   effect="fade"
-                  fadeEffect={{ crossFade: true }}
+                  fadeEffect={{
+                    crossFade: true,
+                  }}
                   loop
-                  speed={800}
-                  onSwiper={(s) => (swiper.current = s)}
-                  onSlideChange={(s) => setActive(s.realIndex)}
-                  className="!absolute !inset-0 !overflow-hidden"
+                  speed={500}
+                  onSwiper={(instance) => {
+                    swiper.current = instance;
+                  }}
+                  onSlideChange={(instance) => {
+                    setActive(instance.realIndex);
+                  }}
+                  className="h-full w-full"
                 >
-                  {machines.map((mc) => (
-                    <SwiperSlide key={mc.name} className="!flex items-center justify-center">
-                      <motion.div
-                        style={{ rotateY, rotateX: scrubTilt, transformPerspective: 1200 }}
-                        className="w-[92%] max-w-[470px] pb-8 drop-shadow-[0_30px_30px_rgba(0,0,0,0.45)]"
-                      >
-                        <MachineArt variant={mc.variant} className="w-full" />
-                      </motion.div>
+                  {machines.map((item) => (
+                    <SwiperSlide
+                      key={item.name}
+                      className="flex items-center justify-center"
+                    >
+                      <div className="flex h-full w-full items-center justify-center p-4">
+
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.35)]"
+                          loading="lazy"
+                        />
+
+                      </div>
                     </SwiperSlide>
                   ))}
                 </Swiper>
 
-                {/* dots */}
-                <div className="absolute inset-x-0 -bottom-3 z-10 flex justify-center gap-1.5">
-                  {machines.map((_, i) => (
-                    <button
-                      key={i}
-                      aria-label={`Slide ${i + 1}`}
-                      onClick={() => swiper.current?.slideToLoop(i)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-5 bg-brand-400" : "w-1.5 bg-white/40"}`}
-                    />
-                  ))}
-                </div>
               </div>
 
-              {/* right: info */}
-              <div className="z-10 min-h-[200px]">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.35 }}
-                  >
-                    <span className="inline-block rounded-full bg-brand-500 px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-white">
-                      {m.badge}
-                    </span>
-                    <h3 className="mt-3 text-xl font-bold leading-snug text-white">{m.name}</h3>
-                    <div className="mt-1.5 text-[13px] font-semibold text-brand-200">{m.price}</div>
-                    <ul className="mt-3 space-y-1.5">
-                      {m.feats.map((f) => (
-                        <li key={f} className="flex items-center gap-2 text-[12px] text-white/80">
-                          <Check size={13} className="text-brand-400" /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                </AnimatePresence>
-                <div className="mt-6 flex gap-2.5">
-                  {[
-                    { I: ArrowLeft, fn: () => swiper.current?.slidePrev(), l: "Previous" },
-                    { I: ArrowRight, fn: () => swiper.current?.slideNext(), l: "Next" },
-                  ].map(({ I, fn, l }) => (
-                    <motion.button
-                      key={l}
-                      aria-label={l}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={fn}
-                      className="grid h-9 w-9 place-items-center rounded-full border border-white/30 text-white transition-colors hover:bg-white hover:text-brand-800"
-                    >
-                      <I size={15} />
-                    </motion.button>
-                  ))}
-                </div>
+              {/* SLIDER PAGINATION */}
+              <div className="relative z-10 mt-2 flex justify-center gap-2">
+                {machines.map((item, index) => (
+                  <button
+                    key={item.name}
+                    aria-label={`Show ${item.name}`}
+                    onClick={() => swiper.current?.slideToLoop(index)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      index === active
+                        ? "w-8 bg-blue-400"
+                        : "w-1.5 bg-white/35 hover:bg-white/70"
+                    }`}
+                  />
+                ))}
               </div>
+
             </div>
+
+            {/* RIGHT MACHINE INFORMATION */}
+            <div className="relative z-10 min-h-[260px]">
+
+              <div
+                key={active}
+                className="animate-[fadeIn_0.4s_ease-out]"
+              >
+
+                <span className="inline-block rounded-full border border-blue-300/30 bg-blue-500/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-200">
+                  {machine.badge}
+                </span>
+
+                <h3 className="mt-5 text-[23px] font-bold leading-snug text-white sm:text-[26px]">
+                  {machine.name}
+                </h3>
+
+                <div className="mt-3 text-[15px] font-bold text-blue-300">
+                  {machine.price}
+                </div>
+
+                <div className="my-6 h-px w-full bg-white/15" />
+
+                <ul className="space-y-4">
+                  {machine.feats.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-start gap-3 text-[13px] leading-relaxed text-white/80"
+                    >
+                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-blue-500/20">
+                        <Check
+                          size={12}
+                          className="text-blue-300"
+                        />
+                      </span>
+
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+              </div>
+
+              <div className="mt-8 flex gap-3">
+
+                <button
+                  aria-label="Previous machine"
+                  onClick={() => swiper.current?.slidePrev()}
+                  className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition-all hover:border-blue-400 hover:bg-blue-500"
+                >
+                  <ArrowLeft size={18} />
+                </button>
+
+                <button
+                  aria-label="Next machine"
+                  onClick={() => swiper.current?.slideNext()}
+                  className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition-all hover:border-blue-400 hover:bg-blue-500"
+                >
+                  <ArrowRight size={18} />
+                </button>
+
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>

@@ -1,7 +1,9 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Layers, Leaf, Settings, Target, Zap } from "lucide-react";
+
+const EASE = [0.16, 1, 0.3, 1];
 
 const items = [
   {
@@ -41,8 +43,26 @@ const items = [
   },
 ];
 
-/* small glowing dot + curved line joining a card to the centre circle */
-function Connector({ side }) {
+/* word-by-word heading reveal */
+function Words({ text, base = 0 }) {
+  return text.split(" ").map((w, i) => (
+    <span key={i} className="inline-block overflow-hidden align-bottom">
+      <motion.span
+        className="inline-block"
+        initial={{ y: "110%" }}
+        whileInView={{ y: "0%" }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: base + i * 0.07, ease: EASE }}
+      >
+        {w}&nbsp;
+      </motion.span>
+    </span>
+  ));
+}
+
+/* dot + curved line joining a card to the centre circle.
+   The line draws itself, and an energy pulse travels toward the portal. */
+function Connector({ side, index, reduce }) {
   const left = side === "left";
   return (
     <svg
@@ -55,136 +75,384 @@ function Connector({ side }) {
         left ? "-right-[70px]" : "-left-[70px] -scale-x-100"
       }`}
     >
-      <path d="M8 14 C40 12 60 24 88 30" stroke="#5b9bff" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="8" cy="14" r="7" fill="#1a66ff" opacity=".25" />
+      <motion.path
+        d="M8 14 C40 12 60 24 88 30"
+        stroke="#5b9bff"
+        strokeWidth="2"
+        strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, delay: 0.5 + index * 0.1, ease: "easeOut" }}
+      />
+      {/* pulsing halo */}
+      <motion.circle
+        cx="8"
+        cy="14"
+        r="7"
+        fill="#1a66ff"
+        animate={reduce ? { opacity: 0.25 } : { opacity: [0.15, 0.4, 0.15], r: [6, 9, 6] }}
+        transition={{ duration: 2.4, repeat: Infinity, delay: index * 0.3 }}
+      />
       <circle cx="8" cy="14" r="5" fill="#1a66ff" />
+      {/* travelling energy pulse */}
+      {!reduce && (
+        <motion.circle
+          r="2.6"
+          fill="#fff"
+          stroke="#1a66ff"
+          strokeWidth="1.5"
+          initial={{ cx: 8, cy: 14, opacity: 0 }}
+          animate={{
+            cx: [8, 30, 49.5, 68, 88],
+            cy: [14, 14.8, 19, 24.7, 30],
+            opacity: [0, 1, 1, 1, 0],
+          }}
+          transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.4, delay: 1.5 + index * 0.35, ease: "easeInOut" }}
+        />
+      )}
     </svg>
   );
 }
 
-function FeatureCard({ item, index, active, onEnter }) {
+function FeatureCard({ item, index, active, onEnter, reduce }) {
   const { icon: Icon, title, text, side, shift } = item;
+  const left = side === "left";
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.08 }}
-      onMouseEnter={onEnter}
-      className={`relative w-full max-w-[520px] ${shift} ${
-        side === "left" ? "lg:ml-auto" : "lg:mr-auto"
-      }`}
-    >
-      <Connector side={side} />
-      {/* slanted glass plate */}
-      <div
-        className={`-skew-x-[8deg] rounded-[28px] ring-1 backdrop-blur transition-all duration-300 ${
-          active
-            ? "bg-white shadow-[0_28px_60px_-20px_rgba(26,102,255,0.45)] ring-[#9cc2ff]"
-            : "bg-white/75 shadow-[0_22px_50px_-26px_rgba(37,99,235,0.35)] ring-white"
-        }`}
+    /* wrapper keeps the Tailwind translate shift separate from framer-motion's transform */
+    <div className={`relative w-full max-w-[520px] ${shift} ${left ? "lg:ml-auto" : "lg:mr-auto"}`}>
+      <motion.div
+        initial={{ opacity: 0, x: left ? -110 : 110, filter: "blur(8px)" }}
+        whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, delay: index * 0.12, ease: EASE }}
+        whileHover={{ x: left ? 10 : -10, scale: 1.02 }}
+        onMouseEnter={onEnter}
+        className="relative"
       >
-        {/* un-slant the content */}
-        <div className="flex skew-x-[8deg] items-center gap-5 px-7 py-5 sm:gap-6">
-          <div className="grid h-[76px] w-[76px] shrink-0 place-items-center rounded-2xl bg-white text-[#1559e6] shadow-[0_10px_24px_-10px_rgba(37,99,235,0.4)] ring-1 ring-[#e3edff]">
-            <Icon size={38} strokeWidth={1.7} />
-          </div>
-          <span className="h-[70px] w-[2px] shrink-0 rounded-full bg-[#1559e6]" />
-          <div>
-            <h3 className="text-[20px] font-bold leading-[1.15] text-[#0b1b4a]">
-              {title[0]}
-              <br />
-              {title[1]}
-            </h3>
-            <p className="mt-1.5 max-w-[290px] text-[14px] leading-snug text-slate-500">{text}</p>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+        <Connector side={side} index={index} reduce={reduce} />
 
-function Portal() {
-  const [failed, setFailed] = useState(false);
-  return (
-    <div className="relative mx-auto h-[400px] w-[340px] sm:h-[500px] sm:w-[420px] lg:h-[560px] lg:w-[460px]">
-      {/* floor glow rings */}
-      <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[150%] -translate-x-1/2 rounded-[50%] border border-[#cfe0ff] bg-[radial-gradient(ellipse_at_center,rgba(59,139,255,0.25),transparent_70%)]" />
-      <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[115%] -translate-x-1/2 rounded-[50%] border border-[#b9d3ff]/80" />
-
-      {/* ring + photo */}
-      <div className="absolute left-1/2 top-0 aspect-square w-[88%] -translate-x-1/2">
-        {/* spinning arc accent */}
-        <motion.svg
-          aria-hidden
-          viewBox="0 0 100 100"
-          className="absolute -inset-[7%] h-[114%] w-[114%]"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        {/* slanted glass plate */}
+        <div
+          className={`relative -skew-x-[8deg] overflow-hidden rounded-[28px] ring-1 backdrop-blur transition-all duration-500 ${
+            active
+              ? "bg-white shadow-[0_28px_60px_-20px_rgba(26,102,255,0.45)] ring-[#9cc2ff]"
+              : "bg-white/75 shadow-[0_22px_50px_-26px_rgba(37,99,235,0.35)] ring-white"
+          }`}
         >
-          <defs>
-            <linearGradient id="arcGrad" x1="0" x2="1">
-              <stop offset="0" stopColor="#1a66ff" />
-              <stop offset="1" stopColor="#8db6ff" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <path d="M 6 38 A 46 46 0 0 1 50 4" stroke="url(#arcGrad)" strokeWidth="1" strokeLinecap="round" fill="none" />
-        </motion.svg>
+          {/* shine sweep when this card becomes active */}
+          {active && (
+            <motion.span
+              key={`shine-${index}`}
+              aria-hidden
+              initial={{ x: "-130%" }}
+              animate={{ x: "260%" }}
+              transition={{ duration: 1.3, ease: "easeInOut" }}
+              className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-[#cfe0ff]/80 to-transparent"
+            />
+          )}
 
-        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#e9f2ff] to-[#cfe2ff] p-[14px] shadow-[0_0_70px_rgba(59,139,255,0.45),inset_0_0_30px_rgba(255,255,255,0.9)] ring-1 ring-white">
-          <div className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-[#1b3d7a] via-[#0b2352] to-[#06122e]">
-            {!failed && (
-              <img
-                src="/why_.png"
-                alt="Laser cutting head at work"
-                draggable={false}
-                onError={() => setFailed(true)}
-                className="h-full w-full object-cover"
-              />
-            )}
+          {/* un-slant the content */}
+          <div className="relative flex skew-x-[8deg] items-center gap-5 px-7 py-5 sm:gap-6">
+            <motion.div
+              animate={
+                reduce
+                  ? { scale: active ? 1.08 : 1 }
+                  : { y: [0, -5, 0], scale: active ? 1.08 : 1, rotate: active ? [0, -6, 6, 0] : 0 }
+              }
+              transition={{
+                y: { duration: 3 + index * 0.4, repeat: Infinity, ease: "easeInOut" },
+                scale: { type: "spring", stiffness: 260, damping: 16 },
+                rotate: { duration: 0.7 },
+              }}
+              className="grid h-[76px] w-[76px] shrink-0 place-items-center rounded-2xl bg-white text-[#1559e6] shadow-[0_10px_24px_-10px_rgba(37,99,235,0.4)] ring-1 ring-[#e3edff]"
+            >
+              <Icon size={38} strokeWidth={1.7} />
+            </motion.div>
+
+            {/* divider grows in */}
+            <motion.span
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.5 + index * 0.1, ease: EASE }}
+              className="h-[70px] w-[2px] shrink-0 rounded-full bg-[#1559e6]"
+            />
+
+            <div>
+              <motion.h3
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.55 + index * 0.1 }}
+                className="text-[20px] font-bold leading-[1.15] text-[#0b1b4a]"
+              >
+                {title[0]}
+                <br />
+                {title[1]}
+              </motion.h3>
+              <motion.p
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.65 + index * 0.1 }}
+                className="mt-1.5 max-w-[290px] text-[14px] leading-snug text-slate-500"
+              >
+                {text}
+              </motion.p>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* podium */}
-      <div className="absolute bottom-[26px] left-1/2 h-[56px] w-[84%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-white via-[#dbe9ff] to-[#8fb8ff] shadow-[0_0_50px_rgba(37,120,255,0.6)]" />
-      <div className="absolute bottom-[44px] left-1/2 h-[34px] w-[78%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#f4f8ff] to-[#cfe0ff]" />
+      </motion.div>
     </div>
   );
 }
 
+const sparks = [
+  { left: "22%", delay: 0, dur: 3.6, size: 5 },
+  { left: "34%", delay: 1.2, dur: 4.2, size: 4 },
+  { left: "46%", delay: 0.5, dur: 3.2, size: 6 },
+  { left: "58%", delay: 2, dur: 4.6, size: 4 },
+  { left: "70%", delay: 0.9, dur: 3.8, size: 5 },
+  { left: "80%", delay: 2.6, dur: 4.1, size: 3 },
+];
+
+function Portal({ reduce }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.2, ease: EASE }}
+      className="relative mx-auto h-[400px] w-[340px] sm:h-[500px] sm:w-[420px] lg:h-[560px] lg:w-[460px]"
+    >
+      {/* floor glow + rippling rings */}
+      <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[150%] -translate-x-1/2 rounded-[50%] border border-[#cfe0ff] bg-[radial-gradient(ellipse_at_center,rgba(59,139,255,0.25),transparent_70%)]" />
+      <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[115%] -translate-x-1/2 rounded-[50%] border border-[#b9d3ff]/80" />
+      {!reduce &&
+        [0, 1.6].map((d) => (
+          <span key={d} aria-hidden className="pointer-events-none absolute bottom-6 left-1/2 h-[70px] w-[115%] -translate-x-1/2">
+            <motion.span
+              className="block h-full w-full rounded-[50%] border border-[#6aa5ff]"
+              animate={{ scale: [0.7, 1.25], opacity: [0.7, 0] }}
+              transition={{ duration: 3.2, repeat: Infinity, delay: d, ease: "easeOut" }}
+            />
+          </span>
+        ))}
+
+      {/* ring + photo */}
+      <div className="absolute left-1/2 top-0 aspect-square w-[88%] -translate-x-1/2">
+        <motion.div
+          className="relative h-full w-full"
+          animate={reduce ? undefined : { y: [0, -12, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {/* breathing glow */}
+          <motion.div
+            aria-hidden
+            className="absolute -inset-[14%] rounded-full bg-[radial-gradient(circle,rgba(59,139,255,0.45),transparent_65%)]"
+            animate={reduce ? undefined : { scale: [1, 1.1, 1], opacity: [0.55, 1, 0.55] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* spinning arc accent */}
+          <motion.svg
+            aria-hidden
+            viewBox="0 0 100 100"
+            className="absolute -inset-[7%] h-[114%] w-[114%]"
+            animate={reduce ? undefined : { rotate: 360 }}
+            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          >
+            <defs>
+              <linearGradient id="arcGrad" x1="0" x2="1">
+                <stop offset="0" stopColor="#1a66ff" />
+                <stop offset="1" stopColor="#8db6ff" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 6 38 A 46 46 0 0 1 50 4" stroke="url(#arcGrad)" strokeWidth="1" strokeLinecap="round" fill="none" />
+          </motion.svg>
+
+
+
+          {/* orbiting light */}
+          <motion.div
+            aria-hidden
+            className="absolute -inset-[7%]"
+            animate={reduce ? undefined : { rotate: 360 }}
+            transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+          >
+            <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1a66ff] shadow-[0_0_14px_4px_rgba(26,102,255,0.7)]" />
+          </motion.div>
+
+          <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#e9f2ff] to-[#cfe2ff] p-[14px] shadow-[0_0_70px_rgba(59,139,255,0.45),inset_0_0_30px_rgba(255,255,255,0.9)] ring-1 ring-white">
+            <div className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-[#1b3d7a] via-[#0b2352] to-[#06122e]">
+              {!failed && (
+                <motion.img
+                  src="/why_.png"
+                  alt="Laser cutting head at work"
+                  draggable={false}
+                  onError={() => setFailed(true)}
+                  className="h-full w-full object-cover"
+                  animate={reduce ? undefined : { scale: [1, 1.07, 1] }}
+                  transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                />
+              )}
+              {/* light sweep across the photo */}
+              {!reduce && (
+                <motion.span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  initial={{ x: "-150%" }}
+                  animate={{ x: "420%" }}
+                  transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
+                />
+              )}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* podium (glow pulses) */}
+      <motion.div
+        className="absolute bottom-[26px] left-1/2 h-[56px] w-[84%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-white via-[#dbe9ff] to-[#8fb8ff]"
+        animate={
+          reduce
+            ? undefined
+            : {
+                boxShadow: [
+                  "0 0 30px rgba(37,120,255,0.4)",
+                  "0 0 70px rgba(37,120,255,0.8)",
+                  "0 0 30px rgba(37,120,255,0.4)",
+                ],
+              }
+        }
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <div className="absolute bottom-[44px] left-1/2 h-[34px] w-[78%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#f4f8ff] to-[#cfe0ff]" />
+
+      {/* sparks rising off the podium */}
+      {!reduce &&
+        sparks.map((s, i) => (
+          <motion.span
+            key={i}
+            aria-hidden
+            className="pointer-events-none absolute bottom-[60px] rounded-full bg-[#4d90ff] shadow-[0_0_10px_3px_rgba(59,139,255,0.7)]"
+            style={{ left: s.left, width: s.size, height: s.size }}
+            animate={{ y: [0, -230], opacity: [0, 1, 0], scale: [0.6, 1, 0.4] }}
+            transition={{ duration: s.dur, repeat: Infinity, delay: s.delay, ease: "easeOut" }}
+          />
+        ))}
+    </motion.div>
+  );
+}
+
 export default function WhyChooseUs() {
+  const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
   const left = items.filter((i) => i.side === "left");
   const right = items.filter((i) => i.side === "right");
+
+  /* highlight cycles through the cards automatically; pauses while hovering */
+  useEffect(() => {
+    if (paused || reduce) return;
+    const t = setInterval(() => setActive((a) => (a + 1) % items.length), 3000);
+    return () => clearInterval(t);
+  }, [paused, reduce]);
 
   return (
     <section
       style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
       className="relative overflow-hidden bg-gradient-to-b from-[#f4f8ff] via-[#eaf2ff] to-[#e3edff] py-16"
     >
-      {/* soft swoosh backgrounds */}
-      <div aria-hidden className="pointer-events-none absolute -left-40 -top-24 h-[420px] w-[520px] rotate-[-20deg] rounded-[50%] bg-[#d6e5ff]/70 blur-2xl" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-32 h-[380px] w-[560px] rounded-[50%] bg-[#cfe0ff]/70 blur-2xl" />
+      {/* soft swoosh backgrounds – slow drift */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-40 -top-24 h-[420px] w-[520px] rounded-[50%] bg-[#d6e5ff]/70 blur-2xl"
+        style={{ rotate: -20 }}
+        animate={reduce ? undefined : { x: [0, 50, 0], y: [0, 24, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 -right-32 h-[380px] w-[560px] rounded-[50%] bg-[#cfe0ff]/70 blur-2xl"
+        animate={reduce ? undefined : { x: [0, -50, 0], y: [0, -24, 0] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative mx-auto w-full max-w-[1800px] px-4 lg:px-10">
         {/* header */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-4">
-            <span className="h-[3px] w-12 rounded-full bg-[#1559e6]" />
-            <span className="text-[15px] font-bold uppercase tracking-[0.3em] text-[#1559e6]">Why choose us</span>
-            <span className="h-[3px] w-12 rounded-full bg-[#1559e6]" />
+            <motion.span
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="h-[3px] w-12 origin-right rounded-full bg-[#1559e6]"
+            />
+            <motion.span
+              initial={{ opacity: 0, letterSpacing: "0.6em" }}
+              whileInView={{ opacity: 1, letterSpacing: "0.3em" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: EASE }}
+              className="text-[15px] font-bold uppercase text-[#1559e6]"
+            >
+              Why choose us
+            </motion.span>
+            <motion.span
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="h-[3px] w-12 origin-left rounded-full bg-[#1559e6]"
+            />
           </div>
+
           <h2 className="mt-3 text-[34px] font-bold leading-tight tracking-tight text-[#0b1b4a] md:text-[56px]">
-            Features That Make the <span className="text-[#1a66ff]">Difference</span>
+            <Words text="Features That Make the" base={0.15} />
+            <span className="inline-block overflow-hidden align-bottom">
+              <motion.span
+                className="inline-block"
+                initial={{ y: "110%" }}
+                whileInView={{ y: "0%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
+              >
+                {/* shimmering gradient text */}
+                <motion.span
+                  className="inline-block bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage: "linear-gradient(90deg,#1a66ff,#6aa5ff,#1a66ff)",
+                    backgroundSize: "200% 100%",
+                  }}
+                  animate={reduce ? undefined : { backgroundPosition: ["0% 50%", "200% 50%"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                >
+                  Difference
+                </motion.span>
+              </motion.span>
+            </span>
           </h2>
-          <p className="mx-auto mt-2 max-w-[760px] text-[17px] font-medium text-slate-500">
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="mx-auto mt-2 max-w-[760px] text-[17px] font-medium text-slate-500"
+          >
             Advanced technology, reliable performance, and long-term value for your laser cutting needs.
-          </p>
+          </motion.p>
         </div>
 
         {/* feature cards around the portal */}
-        <div className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_460px_minmax(0,1fr)] lg:gap-16">
+        <div
+          className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_460px_minmax(0,1fr)] lg:gap-16"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
           <div className="order-2 flex flex-col gap-6 lg:order-1 lg:gap-8">
             {left.map((it) => (
               <FeatureCard
@@ -193,12 +461,13 @@ export default function WhyChooseUs() {
                 index={items.indexOf(it)}
                 active={active === items.indexOf(it)}
                 onEnter={() => setActive(items.indexOf(it))}
+                reduce={reduce}
               />
             ))}
           </div>
 
           <div className="order-1 lg:order-2">
-            <Portal />
+            <Portal reduce={reduce} />
           </div>
 
           <div className="order-3 flex flex-col gap-5">
@@ -209,6 +478,7 @@ export default function WhyChooseUs() {
                 index={items.indexOf(it)}
                 active={active === items.indexOf(it)}
                 onEnter={() => setActive(items.indexOf(it))}
+                reduce={reduce}
               />
             ))}
           </div>
