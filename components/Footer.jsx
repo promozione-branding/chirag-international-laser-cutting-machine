@@ -118,22 +118,12 @@ export default function Footer() {
 
       <div className="relative border-t border-white/10">
         <div className="container-x flex flex-col items-center justify-between gap-3 py-5 text-[12px] text-white/50 sm:flex-row">
-          <p>© {new Date().getFullYear()} Ci Laser Cutting International. All rights reserved.</p>
-          <div className="flex items-center gap-5">
-            <a href="#" className="transition-colors hover:text-white">
-              Privacy Policy
+          <p>© {new Date().getFullYear()} Chirag International Pvt.Ltd. All rights reserved.</p>
+          <div className="flex items-center gap-2">
+           Website Designed By Inquiry Bazaar Pvt. Ltd.
+            <a href="https://inquirybazaar.com/" className="transition-colors text-white hover:text-brand">
+              B2B Marketplace
             </a>
-            <a href="#" className="transition-colors hover:text-white">
-              Terms of Service
-            </a>
-            <motion.a
-              href="#"
-              aria-label="Back to top"
-              whileHover={{ y: -3 }}
-              className="grid h-8 w-8 place-items-center rounded-full bg-brand text-white shadow-glow"
-            >
-              <ArrowUp size={14} />
-            </motion.a>
           </div>
         </div>
       </div>

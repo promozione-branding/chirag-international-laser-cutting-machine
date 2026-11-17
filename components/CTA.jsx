@@ -1,9 +1,10 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { LaserNozzle, LaserSparks } from "./art/LaserArt";
 import Magnetic from "./ui/Magnetic";
+import QuoteModal from "./QuoteModal";
 const w1 = "M0 140 C240 80 480 200 720 140 C960 80 1200 200 1440 140";
 const w2 = "M0 150 C240 210 480 90 720 150 C960 210 1200 90 1440 150";
 const w3 = "M0 110 C300 170 560 60 820 110 C1080 160 1260 70 1440 110";
@@ -16,6 +17,7 @@ const particles = Array.from({ length: 22 }, (_, i) => ({
   delay: (i % 7) * 0.5,
 }));
 export default function CTA() {
+    const [quoteOpen, setQuoteOpen] = useState(false);
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
@@ -133,18 +135,17 @@ export default function CTA() {
           transition={{ type: "spring", stiffness: 160, damping: 14, delay: 0.3 }}
         >
           <Magnetic strength={0.4}>
-            <motion.a
-              href="#contact"
-              whileTap={{ scale: 0.95 }}
-              animate={{ boxShadow: ["0 0 0 0 rgba(255,255,255,0.55)", "0 0 0 16px rgba(255,255,255,0)"] }}
-              transition={{ duration: 1.8, repeat: Infinity }}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-700 transition-colors hover:bg-brand-50"
-            >
+      <button
+    type="button"
+    onClick={() => setQuoteOpen(true)}
+    className="btn-primary !py-2.5 !text-[13px]"
+  >
               Request a Quote <ArrowUpRight size={16} />
-            </motion.a>
+            </button>
           </Magnetic>
         </motion.div>
       </div>
+                  <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </section>
   );
 }

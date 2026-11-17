@@ -32,16 +32,92 @@ body {
   .container-x {
     @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
   }
+
+  /* ---------- Buttons ---------- */
   .btn-primary {
     @apply inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-brand-500 to-brand-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_-8px_rgba(11,91,245,0.7)] transition-shadow hover:shadow-[0_16px_36px_-6px_rgba(11,91,245,0.85)];
   }
   .btn-outline {
     @apply inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/70 px-6 py-3 text-sm font-semibold text-ink backdrop-blur transition-colors hover:border-brand hover:bg-white;
+    --gloss-top: rgba(255, 255, 255, 0.9);
+    --gloss-bottom: rgba(255, 255, 255, 0.15);
+    --sweep: rgba(11, 91, 245, 0.16);
   }
   .btn-secondary {
-  @apply inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-gray-600 to-gray-800 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_-8px_rgba(31,41,55,0.6)] transition-shadow hover:shadow-[0_16px_36px_-6px_rgba(31,41,55,0.8)];
+    @apply inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-gray-600 to-gray-800 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_-8px_rgba(31,41,55,0.6)] transition-shadow hover:shadow-[0_16px_36px_-6px_rgba(31,41,55,0.8)];
+  }
+  .btn-white {
+    @apply inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-gray-600 to-gray-800 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_-8px_rgba(31,41,55,0.6)] transition-shadow hover:shadow-[0_16px_36px_-6px_rgba(31,41,55,0.8)];
+  }
 }
 
+/* ---------- Mirror effect (shared by every button) ----------
+   ::before = static glass highlight on the top half
+   ::after  = light streak that sweeps across on hover
+   Both sit at z-index -1 inside an isolated stacking context,
+   so they paint above the button background but below its text/icons. */
+.btn-primary,
+.btn-outline,
+.btn-secondary,
+.btn-white {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --gloss-top: rgba(255, 255, 255, 0.5);
+  --gloss-bottom: rgba(255, 255, 255, 0.05);
+  --sweep: rgba(255, 255, 255, 0.65);
+}
+
+.btn-primary::before,
+.btn-outline::before,
+.btn-secondary::before,
+.btn-white::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 48% 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 9999px 9999px 60% 60% / 9999px 9999px 14px 14px;
+  background: linear-gradient(to bottom, var(--gloss-top), var(--gloss-bottom));
+}
+
+.btn-primary::after,
+.btn-outline::after,
+.btn-secondary::after,
+.btn-white::after {
+  content: "";
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: 0;
+  width: 45%;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 15%, var(--sweep) 50%, transparent 85%);
+  transform: translateX(-170%) skewX(-22deg);
+  animation: btn-shine 3.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* sweep takes ~1.6s, then the button rests before the next pass */
+@keyframes btn-shine {
+  0% {
+    transform: translateX(-170%) skewX(-22deg);
+  }
+  45%,
+  100% {
+    transform: translateX(330%) skewX(-22deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary::after,
+  .btn-outline::after,
+  .btn-secondary::after,
+  .btn-white::after {
+    animation: none;
+    /* keep a static reflection band so the mirror look remains */
+    transform: translateX(120%) skewX(-22deg);
+  }
 }
 
 .preserve-3d {
@@ -57,21 +133,36 @@ body {
   color: #fff;
 }
 
- * { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
- html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: hidden; }
-.lenis.lenis-smooth iframe { pointer-events: none; }
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
 
- @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

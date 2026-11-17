@@ -13,6 +13,8 @@ import {
   Zap,
 } from "lucide-react";
 import Magnetic from "./ui/Magnetic";
+import { useState } from "react";
+import QuoteModal from "./QuoteModal";
 
 function MagneticLetter({ char, color, index }) {
   return (
@@ -63,6 +65,7 @@ function mix(from, to, t) {
 
 
 export default function Hero() {
+  const [quoteOpen, setQuoteOpen] = useState(false);
   return (
     <section className="relative isolate min-h-[720px] overflow-hidden bg-[#03152f] lg:min-h-[780px]">
 
@@ -215,6 +218,7 @@ export default function Hero() {
           SCROLL TO EXPLORE
         </a>
       </div>
+            <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </section>
   );
 }
