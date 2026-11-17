@@ -101,12 +101,13 @@ function TimelineCard({ t, from }) {
 /* ───────────────────── path / spark helpers ───────────────────── */
 
 const TAU = Math.PI * 2;
-const MAX_PARTS = 45;
 
-/* short heat ramp for the cut: white-hot at the beam → warm orange as it cools */
+/* metal cooling ramp: white-hot → yellow → orange → deep red */
 const HEAT_STOPS = [
-  [0, [255, 140, 60]],
-  [0.5, [255, 205, 130]],
+  [0, [110, 30, 30]],
+  [0.15, [200, 50, 20]],
+  [0.4, [255, 130, 40]],
+  [0.7, [255, 210, 120]],
   [1, [255, 250, 235]],
 ];
 function heatRGB(h) {
@@ -201,26 +202,67 @@ function distForY(T, y) {
   return Math.min(T.L, (lo + f) * T.step);
 }
 
-/* a few tiny, short-lived sparks kicked back along the already-cut line,
-   in a narrow fan, like dross flicking off a laser kerf */
+/* molten sparks: a tight cone opposite to travel, low count, short life, no wild pops */
 function cutSparks(T, parts, d, dir, n) {
-  if (parts.length > MAX_PARTS) return;
+  if (parts.length > 260) return;
   const [x, y] = pointAt(T, d);
   const [x1, y1] = pointAt(T, Math.max(0, d - 4));
   const [x2, y2] = pointAt(T, Math.min(T.L, d + 4));
   const travel = Math.atan2(y2 - y1, x2 - x1) + (dir < 0 ? Math.PI : 0);
   for (let k = 0; k < n; k++) {
-    const ang = travel + Math.PI + (Math.random() - 0.5) * 0.9;
-    const sp = 1 + Math.pow(Math.random(), 2) * 3.2;
-    const life = 10 + Math.random() * 12;
+    const ang = travel + Math.PI + (Math.random() - 0.5) * 0.55; // narrow fan behind the cut
+    const sp = 1 + Math.pow(Math.random(), 2.2) * 4.5;           // mostly slow, few fast
+    const life = 14 + Math.random() * 26;
     parts.push({
       x,
       y,
       vx: Math.cos(ang) * sp,
-      vy: Math.sin(ang) * sp,
+      vy: Math.sin(ang) * sp - Math.random() * 0.6,
       life,
       max: life,
-      w: 0.7 + Math.random() * 0.6,
+      w: 0.7 + Math.random() * 0.9,
+      h0: 1,
+      split: false,
+      ember: false,
+    });
+  }
+}
+
+/* faint embers left on the cut line, cooling quickly */
+function embers(T, parts, d) {
+  if (parts.length > 260) return;
+  const [x, y] = pointAt(T, d);
+  const life = 34 + Math.random() * 40;
+  parts.push({
+    x: x + (Math.random() - 0.5) * 2.5,
+    y: y + (Math.random() - 0.5) * 2.5,
+    vx: (Math.random() - 0.5) * 0.25,
+    vy: -Math.random() * 0.15,
+    life,
+    max: life,
+    w: 0.8 + Math.random() * 0.8,
+    h0: 0.55,
+    split: true,
+    ember: true,
+  });
+}
+
+function burst(parts, x, y) {
+  for (let k = 0; k < 12; k++) {
+    const ang = Math.random() * TAU;
+    const sp = 0.8 + Math.pow(Math.random(), 2) * 3.5;
+    const life = 14 + Math.random() * 22;
+    parts.push({
+      x,
+      y,
+      vx: Math.cos(ang) * sp,
+      vy: Math.sin(ang) * sp - 0.4,
+      life,
+      max: life,
+      w: 0.7 + Math.random() * 0.9,
+      h0: 0.9,
+      split: false,
+      ember: false,
     });
   }
 }
@@ -236,7 +278,7 @@ export default function Story() {
   const canvasRef = useRef(null);
   const geomRef = useRef(null);
   const tblRef = useRef(null);
-  const st = useRef({ dist: 0, lastMask: -1, parts: [], dirty: true, glow: 0 });
+  const st = useRef({ dist: 0, lastMask: -1, parts: [], dirty: true, flare: 0 });
   const [geom, setGeom] = useState(null);
 
   const setCardRef = (i) => (el) => {
@@ -291,7 +333,7 @@ export default function Story() {
     st.current.dirty = true;
   }, [geom]);
 
-  /* 3. animation loop: the laser follows scroll and cuts the dotted line behind it */
+  /* 3. animation loop: dot follows scroll, sparks fly off the line it has passed */
   useEffect(() => {
     const sec = secRef.current;
     const canvas = canvasRef.current;
@@ -309,7 +351,7 @@ export default function Story() {
       const dt = Math.min(2.5, (now - last) / 16.67);
       last = now;
 
-      /* the laser sits on the line at the height of the middle of the screen */
+      /* the dot sits on the line at the height of the middle of the screen */
       const refY = window.innerHeight * 0.5 - sec.getBoundingClientRect().top;
       const target = distForY(T, refY);
       const prev = S.dist;
@@ -317,34 +359,51 @@ export default function Story() {
       if (Math.abs(target - S.dist) < 0.2) S.dist = target;
       const moved = Math.abs(S.dist - prev);
 
-      /* the cut (bright) line is revealed up to the laser */
+      /* bright "cut" line is revealed up to the dot */
       if (Math.abs(S.dist - S.lastMask) > 0.4) {
         S.lastMask = S.dist;
         maskRef.current?.setAttribute("stroke-dasharray", `${S.dist} ${T.L + 50}`);
       }
 
-      /* beam intensity: ramps up while cutting, eases off when idle */
-      S.glow = moved > 0.15 ? Math.min(1, S.glow + 0.25 * dt) : S.glow * Math.pow(0.88, dt);
-
-      /* just a few small sparks, only while actively cutting */
-      if (!reduce && moved > 0.4) {
-        const c = (Math.random() < 0.45 ? 1 : 0) + (moved > 6 && Math.random() < 0.5 ? 1 : 0);
-        if (c) cutSparks(T, S.parts, S.dist, S.dist >= prev ? 1 : -1, c);
+      if (!reduce) {
+        if (moved > 0.05) {
+          const n = Math.min(10, 1 + moved * 0.9);
+          const c = Math.floor(n) + (Math.random() < n % 1 ? 1 : 0);
+          cutSparks(T, S.parts, S.dist, S.dist >= prev ? 1 : -1, c);
+          if (Math.random() < 0.25) {
+            embers(T, S.parts, Math.max(0, S.dist - 8 - Math.random() * Math.min(140, S.dist)));
+          }
+          S.flare = 0.35;
+        } else {
+          S.flare *= 0.8;
+        }
+        /* small puff when the dot passes a node */
+        T.nodeD.forEach((nd, i) => {
+          if ((prev < nd && S.dist >= nd) || (prev > nd && S.dist <= nd)) {
+            burst(S.parts, g.nodes[i].x, g.nodes[i].y);
+          }
+        });
       }
 
       for (let i = S.parts.length - 1; i >= 0; i--) {
         const p = S.parts[i];
         p.x += p.vx * dt;
         p.y += p.vy * dt;
-        p.vy += 0.1 * dt;
-        const dr = Math.pow(0.92, dt);
-        p.vx *= dr;
-        p.vy *= dr;
+        if (p.ember) {
+          const dr = Math.pow(0.9, dt);
+          p.vx *= dr;
+          p.vy = p.vy * dr - 0.004 * dt;
+        } else {
+          p.vy += 0.09 * dt;
+          const dr = Math.pow(0.96, dt);
+          p.vx *= dr;
+          p.vy *= dr;
+        }
         p.life -= dt;
         if (p.life <= 0) S.parts.splice(i, 1);
       }
 
-      if (!(S.parts.length > 0 || moved > 0 || S.dirty || S.glow > 0.02)) return;
+      if (!(S.parts.length > 0 || moved > 0 || S.dirty || S.flare > 0.02)) return;
       S.dirty = false;
 
       ctx.clearRect(0, 0, g.w, g.h);
@@ -357,38 +416,37 @@ export default function Story() {
         halo.addColorStop(1, "rgba(37,120,255,0)");
         ctx.fillStyle = halo;
         ctx.beginPath();
-        ctx.arc(nd.x, nd.y, 24, 0, TAU);
+        ctx.arc(nd.x, nd.y, 24, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = lit ? "#1a66ff" : "#8db6ff";
         ctx.beginPath();
-        ctx.arc(nd.x, nd.y, 10, 0, TAU);
+        ctx.arc(nd.x, nd.y, 10, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = "#fff";
         ctx.beginPath();
-        ctx.arc(nd.x, nd.y, 4, 0, TAU);
+        ctx.arc(nd.x, nd.y, 4, 0, Math.PI * 2);
         ctx.fill();
       });
 
+      /* molten kerf: white-hot at the beam, cooling to orange → red behind it */
       ctx.globalCompositeOperation = "lighter";
       ctx.lineCap = "round";
-
-      /* short heat-glow right behind the beam, fading quickly: the fresh kerf */
-      const tl = Math.min(46, S.dist);
-      if (tl > 1 && S.glow > 0.02) {
-        const segs = 12;
+      const tl = Math.min(170, S.dist);
+      if (tl > 1) {
+        const segs = 20;
         let a = pointAt(T, S.dist - tl);
         for (let k = 1; k <= segs; k++) {
           const b = pointAt(T, S.dist - tl + (tl * k) / segs);
-          const heat = Math.pow(k / segs, 2);
+          const heat = Math.pow(k / segs, 2.2);
           const rgb = heatRGB(heat);
-          ctx.strokeStyle = `rgba(${rgb},${(0.05 + 0.3 * heat) * S.glow})`;
-          ctx.lineWidth = 2 + 4 * heat;
+          ctx.strokeStyle = `rgba(${rgb},${0.05 + 0.22 * heat})`;
+          ctx.lineWidth = 2 + 5 * heat;
           ctx.beginPath();
           ctx.moveTo(a[0], a[1]);
           ctx.lineTo(b[0], b[1]);
           ctx.stroke();
-          ctx.strokeStyle = `rgba(${rgb},${(0.1 + 0.7 * heat) * S.glow})`;
-          ctx.lineWidth = 0.8 + 1.4 * heat;
+          ctx.strokeStyle = `rgba(${rgb},${0.12 + 0.7 * heat})`;
+          ctx.lineWidth = 0.8 + 1.6 * heat;
           ctx.beginPath();
           ctx.moveTo(a[0], a[1]);
           ctx.lineTo(b[0], b[1]);
@@ -397,48 +455,78 @@ export default function Story() {
         }
       }
 
-      /* small sparks: thin streaks, no glow blobs */
+      /* sparks and embers, coloured by how hot they still are */
       for (const p of S.parts) {
-        const t = p.life / p.max;
-        const rgb = heatRGB(t);
-        const k = 1.6;
-        ctx.strokeStyle = `rgba(${rgb},${Math.min(1, t * 1.6)})`;
-        ctx.lineWidth = p.w;
+        const heat = Math.max(0, (p.life / p.max) * p.h0);
+        const al = Math.min(0.85, (p.life / p.max) * 1.4);
+        const rgb = heatRGB(heat);
+        if (p.ember) {
+          const fl = 0.6 + Math.random() * 0.4;
+          ctx.fillStyle = `rgba(${rgb},${al * 0.12 * fl})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.w * 2.2, 0, TAU);
+          ctx.fill();
+          ctx.fillStyle = `rgba(${rgb},${al * 0.7 * fl})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.w * (0.7 + heat * 0.6), 0, TAU);
+          ctx.fill();
+          continue;
+        }
+        const sp = Math.hypot(p.vx, p.vy);
+        const k = 1.5 + Math.min(2.5, sp * 0.3);
+        ctx.strokeStyle = `rgba(${rgb},${al * 0.22})`;
+        ctx.lineWidth = p.w * 1.2;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - p.vx * k * 1.8, p.y - p.vy * k * 1.8);
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(${rgb},${al})`;
+        ctx.lineWidth = p.w * (0.5 + heat * 0.4);
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.x - p.vx * k, p.y - p.vy * k);
         ctx.stroke();
+        if (heat > 0.65) {
+          ctx.fillStyle = `rgba(255,255,255,${al * 0.7})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.w * 0.45, 0, TAU);
+          ctx.fill();
+        }
       }
       ctx.globalCompositeOperation = "source-over";
 
-      /* the laser head: focused blue glow with a white-hot core */
+      /* the moving dot, with a small white-hot point while it is cutting */
       const [dx, dy] = pointAt(T, S.dist);
-      const glow = ctx.createRadialGradient(dx, dy, 0, dx, dy, 30);
-      glow.addColorStop(0, "rgba(37,120,255,.5)");
+      const glow = ctx.createRadialGradient(dx, dy, 0, dx, dy, 40);
+      glow.addColorStop(0, "rgba(37,120,255,.55)");
       glow.addColorStop(1, "rgba(37,120,255,0)");
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(dx, dy, 30, 0, TAU);
+      ctx.arc(dx, dy, 40, 0, TAU);
       ctx.fill();
       ctx.fillStyle = "#1a66ff";
       ctx.beginPath();
-      ctx.arc(dx, dy, 8, 0, TAU);
+      ctx.arc(dx, dy, 11, 0, TAU);
       ctx.fill();
       ctx.fillStyle = "#fff";
       ctx.beginPath();
-      ctx.arc(dx, dy, 3.4, 0, TAU);
+      ctx.arc(dx, dy, 4.6, 0, TAU);
       ctx.fill();
 
-      /* small warm flash at the contact point while cutting */
-      if (S.glow > 0.02) {
+      const fl = S.flare * (0.75 + Math.random() * 0.25);
+      if (fl > 0.03) {
         ctx.globalCompositeOperation = "lighter";
-        const hot = ctx.createRadialGradient(dx, dy, 0, dx, dy, 16);
-        hot.addColorStop(0, `rgba(255,235,200,${0.8 * S.glow})`);
-        hot.addColorStop(0.5, `rgba(255,160,70,${0.3 * S.glow})`);
-        hot.addColorStop(1, "rgba(255,120,40,0)");
-        ctx.fillStyle = hot;
+        const bloom = ctx.createRadialGradient(dx, dy, 0, dx, dy, 26);
+        bloom.addColorStop(0, `rgba(255,240,220,${0.5 * fl})`);
+        bloom.addColorStop(0.3, `rgba(255,170,80,${0.25 * fl})`);
+        bloom.addColorStop(1, "rgba(255,100,20,0)");
+        ctx.fillStyle = bloom;
         ctx.beginPath();
-        ctx.arc(dx, dy, 16, 0, TAU);
+        ctx.arc(dx, dy, 26, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = `rgba(255,255,255,${0.6 * fl})`;
+        ctx.beginPath();
+        ctx.arc(dx, dy, 3, 0, TAU);
         ctx.fill();
         ctx.globalCompositeOperation = "source-over";
       }
@@ -504,7 +592,7 @@ export default function Story() {
               strokeDasharray="5 8"
             />
 
-            {/* the line behind the laser: cut, brighter, with a soft glow */}
+            {/* the line behind the laser: brighter, with a soft glow */}
             <g mask={`url(#${uid}m)`}>
               <path
                 d={geom.d}
