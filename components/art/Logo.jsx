@@ -14,7 +14,7 @@ export default function Logo({ className = "" }) {
       className={`flex items-center gap-1.5 ${className}`}
       aria-label="Ci Laser Cutting International"
     >
- <img src="/logo_transparent.webp" alt="logo" />
+ <img src="/logo_transparent.webp" alt="logo" width={120} height={100} />
     </a>
   );
 }
