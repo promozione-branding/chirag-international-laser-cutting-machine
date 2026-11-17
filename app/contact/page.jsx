@@ -1,6 +1,7 @@
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import ContactForm from "@/components/ContactForm";
+import LocationMap from "@/components/LocationMap";
 
 export const metadata = {
   title: "Contact Us",
@@ -63,9 +64,9 @@ export default function ContactPage() {
         bannerImage="/contact_us_hero_.png"
       />
 
-      <section className="mx-auto max-w-[1440px] px-5 py-10 sm:px-8 sm:py-14 lg:px-10">
-        <div className="grid items-start gap-7 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] xl:gap-8">
-          <div className="space-y-4">
+<section className="mx-auto max-w-[1440px] px-5 py-10 sm:px-8 sm:py-14 lg:px-10">
+  <div className="grid items-start gap-7 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] xl:gap-8">
+    <div className="space-y-4">
             {channels.map(({ icon: Icon, label, value, href, external }) => {
               const body = (
                 <>
@@ -113,6 +114,9 @@ export default function ContactPage() {
           </div>
 
           <ContactForm />
+           <div className="lg:col-span-2">
+      <LocationMap />
+    </div>
         </div>
       </section>
     </div>

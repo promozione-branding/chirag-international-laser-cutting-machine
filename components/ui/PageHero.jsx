@@ -8,10 +8,20 @@ export default function PageHero({
   highlight,
   description,
   bannerImage,
+  breadcrumbs, 
+  compact = false, 
   children,
 }) {
+  const crumbs = breadcrumbs || [
+    { label: "Home", href: "/" },
+    { label: `${title} ${highlight}` },
+  ];
   return (
-    <section className="relative isolate flex min-h-[320px] items-center overflow-hidden border-b border-[#e6eef9] bg-[#eaf2ff] sm:min-h-[380px] lg:min-h-[560px]">
+    <section
+      className={`relative isolate flex items-center overflow-hidden border-b border-[#e6eef9] bg-[#eaf2ff] ${
+           "min-h-[320px] sm:min-h-[380px] lg:min-h-[560px]"
+      }`}
+    >
       {bannerImage && (
         <Image
           src={bannerImage}
@@ -29,14 +39,30 @@ export default function PageHero({
         }`}
       />
 
-      <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
-        <div className="mb-4 flex items-center gap-2 text-[11px] font-semibold text-[#61718d]">
-          <Link href="/" className="hover:text-[#0866f5]">
-            Home
-          </Link>
-          <ChevronRight size={13} />
-          <span className="text-[#14264b]">{`${title} ${highlight}`}</span>
-        </div>
+      <div
+        className={`mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-10 ${
+          compact
+            ? "pb-24 pt-10 sm:pb-28 lg:pb-32 lg:pt-12"
+            : "py-16 sm:py-20 lg:py-24"
+        }`}
+      >
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-4 flex flex-wrap items-center gap-2 text-[11px] font-semibold text-[#61718d]"
+        >
+          {crumbs.map((crumb, i) => (
+            <span key={`${crumb.label}-${i}`} className="inline-flex items-center gap-2">
+              {i > 0 && <ChevronRight size={13} />}
+              {crumb.href ? (
+                <Link href={crumb.href} className="hover:text-[#0866f5]">
+                  {crumb.label}
+                </Link>
+              ) : (
+                <span className="text-[#14264b]">{crumb.label}</span>
+              )}
+            </span>
+          ))}
+        </nav>
 
         {eyebrow && (
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#cfe0fa] bg-white/80 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#0866f5]">

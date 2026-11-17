@@ -24,7 +24,9 @@ const IMAGE_SRC = "/machines/metal-laser-marking-machine.png";
 const field =
   "w-full rounded-xl border border-brand-100 bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
 
-export default function QuoteModal({ open, onClose }) {
+export default function QuoteModal({ open, onClose, product }) {
+  // When opened from a product page, preselect that machine in the dropdown
+  const productOptions = product && !products.includes(product) ? [product, ...products] : products;
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -188,15 +190,16 @@ export default function QuoteModal({ open, onClose }) {
                         />
                       </div>
                       <select
+                        key={product || "none"}
                         name="product"
-                        defaultValue=""
+                        defaultValue={product || ""}
                         required
                         className={field}
                       >
                         <option value="" disabled>
                           Select a product *
                         </option>
-                        {products.map((p) => (
+                        {productOptions.map((p) => (
                           <option key={p} value={p}>
                             {p}
                           </option>

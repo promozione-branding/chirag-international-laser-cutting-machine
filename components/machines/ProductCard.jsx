@@ -25,13 +25,12 @@ export default function ProductCard({ product }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#e0e9f5] bg-white shadow-[0_5px_18px_rgba(18,55,105,0.035)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#b8d2f7] hover:shadow-[0_18px_38px_rgba(20,75,150,0.11)]">
       <Link
-        href={product.source}
-        target="_blank"
+        href={`/products/${product.slug}`}
         onMouseEnter={hasVideo ? playVideo : undefined}
         onMouseLeave={hasVideo ? stopVideo : undefined}
         onFocus={hasVideo ? playVideo : undefined}
         onBlur={hasVideo ? stopVideo : undefined}
-        className="relative block h-[220px] overflow-hidden bg-[linear-gradient(145deg,#f5f9ff,#edf4ff)] p-5"
+        className="relative block h-[220px] overflow-hidden bg-[linear-gradient(145deg,#fffff,#fffff)] p-5"
       >
         <span className="absolute left-4 top-4 z-10 rounded-full border border-[#d9e8ff] bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1764cf]">
           {product.categoryLabel}
@@ -114,15 +113,13 @@ export default function ProductCard({ product }) {
           </div>
           <div className="grid grid-cols-[1fr_1fr] gap-2">
             <Link
-              href={product.source}
-              target="_blank"
+              href={`/products/${product.slug}`}
               className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-lg bg-[#0866f5] px-3 text-[11px] font-bold text-white transition-colors hover:bg-[#0754d2]"
             >
               View Details <ArrowRight size={14} />
             </Link>
             <Link
-              href={product.source}
-              target="_blank"
+              href={`/products/${product.slug}#overview`}
               className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-lg border border-[#b9cbe4] bg-white px-2 text-[11px] font-bold text-[#18315b] transition-all hover:border-[#0866f5] hover:bg-[#f2f7ff]"
             >
               <Mail size={14} /> Get Quote

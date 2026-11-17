@@ -14,6 +14,7 @@ import {
 import PageHero from "@/components/ui/PageHero";
 import ContactStrip from "@/components/ui/ContactStrip";
 import { categories } from "@/lib/products";
+import VisionMission from "@/components/VisionMission";
 
 export const metadata = {
   title: "About Us",
@@ -182,7 +183,7 @@ export default function AboutPage() {
           </ul>
         </div>
       </section>
-
+      <VisionMission />
       <ContactStrip />
     </div>
   );
