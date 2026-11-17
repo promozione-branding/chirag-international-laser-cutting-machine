@@ -8,6 +8,7 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import ContactForm from "@/components/ContactForm";
+import MetalReveal from "@/components/MetalReveal";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
       <Categories />
       <About />
       <FeaturedMachines />
+      <MetalReveal/>
       <WhyChooseUs />
       <Story />
       <Testimonials />
