@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  ArrowUpRight,
   ChevronDown,
   Headphones,
   Layers,
@@ -155,7 +156,7 @@ export default function Hero() {
             <Magnetic>
               <a
                 href="/products"
-                className="btn-primary inline-flex items-center gap-3"
+                className="btn-secondary inline-flex items-center gap-3"
               >
                 Explore Machines
                 <ArrowRight size={17} />
@@ -163,15 +164,13 @@ export default function Hero() {
             </Magnetic>
 
             <Magnetic>
-              {/* <a
-                href="#about"
-                className="btn-outline inline-flex items-center gap-3 !border-white/60 !text-white hover:!bg-white hover:!text-[#03152f]"
-              >
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-[#03152f]">
-                  <Play size={10} fill="currentColor" />
-                </span>
-                Watch Video
-              </a> */}
+              <button
+    type="button"
+    onClick={() => setQuoteOpen(true)}
+    className="btn-primary !py-2.5 !text-[13px]"
+  >
+    Get a Quote <ArrowUpRight size={14} />
+  </button>
             </Magnetic>
           </motion.div>
 

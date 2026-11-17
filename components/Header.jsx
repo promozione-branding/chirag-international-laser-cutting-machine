@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import Logo from "./art/Logo";
 import Magnetic from "./ui/Magnetic";
+import QuoteModal from "./QuoteModal";
 
 const nav = [
   { label: "Home", href: "/" },
@@ -37,6 +38,7 @@ export default function Header() {
   const pathname = usePathname();
   const isActive = (href) => !href.includes("#") && pathname === href;
   const { scrollY } = useScroll();
+const [quoteOpen, setQuoteOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 12));
 
@@ -121,11 +123,15 @@ export default function Header() {
   <WhatsAppIcon size={18} />
 </a>
 
-          <Magnetic strength={0.25} className="hidden sm:inline-block">
-            <a href="/#contact" className="btn-primary !py-2.5 !text-[13px]">
-              Get a Quote <ArrowUpRight size={14} />
-            </a>
-          </Magnetic>
+<Magnetic strength={0.25} className="hidden sm:inline-block">
+  <button
+    type="button"
+    onClick={() => setQuoteOpen(true)}
+    className="btn-primary !py-2.5 !text-[13px]"
+  >
+    Get a Quote <ArrowUpRight size={14} />
+  </button>
+</Magnetic>
 
           <button
             aria-label="Menu"
@@ -156,13 +162,21 @@ export default function Header() {
                   {n.label}
                 </a>
               ))}
-              <a href="/#contact" className="btn-primary mt-2 justify-center">
-                Get a Quote <ArrowUpRight size={14} />
-              </a>
+<button
+  type="button"
+  onClick={() => {
+    setMobile(false);
+    setQuoteOpen(true);
+  }}
+  className="btn-primary mt-2 justify-center"
+>
+  Get a Quote <ArrowUpRight size={14} />
+</button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </header>
   );
 }
