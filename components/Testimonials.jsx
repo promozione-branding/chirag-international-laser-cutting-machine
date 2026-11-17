@@ -292,7 +292,7 @@ export default function Testimonials() {
                       }`}
                     >
                       <Icon size={20} className={`shrink-0 ${isFeatured ? "text-white" : "text-brand"}`} />
-                      <span>{r.product}</span>
+                      <span className="text-xs">{r.product}</span>
                     </div>
                   </div>
                 </motion.figure>
