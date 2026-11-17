@@ -4,6 +4,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
+import TopBar from "@/components/TopBar";
 
 export const metadata = {
   title:"Ci Laser | Next-Gen Laser Cutting Solutions",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       <body>
         <Providers>
           <SmoothScroll>
+            <TopBar/>
             <Header />
             <main id="main">{children}</main>
             <Footer />

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import SectionHeading from "./ui/SectionHeading";
+
 const faqs = [
   {
     q: "What materials can your laser cutting machines cut?",
@@ -21,6 +22,7 @@ const faqs = [
     a: "Machines ship with a comprehensive warranty on the machine and key components. Extended service plans are available on request.",
   },
 ];
+
 /* 3D extruded question mark: stacked layers give real depth while it rotates */
 function QuestionMark3D() {
   const layers = Array.from({ length: 14 }, (_, i) => i);
@@ -53,15 +55,18 @@ function QuestionMark3D() {
     </div>
   );
 }
+
 export default function FAQ() {
   const [open, setOpen] = useState(0);
+
   return (
     <section className="relative py-14">
       <div className="container-x grid items-center gap-8 lg:grid-cols-[1fr_1.1fr]">
         <div className="flex items-center gap-6">
           <QuestionMark3D />
           <div>
-            <SectionHeading label="FAQ" size="md">
+            {/* size="lg" assumes SectionHeading supports it; change back to "md" if not */}
+            <SectionHeading label="FAQ" size="lg">
               Frequently
               <br />
               Asked Questions
@@ -71,14 +76,14 @@ export default function FAQ() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.25 }}
-              className="mt-3 max-w-[260px] text-[12.5px] leading-relaxed text-ink/65"
+              className="mt-4 max-w-[340px] text-base leading-relaxed text-ink/65"
             >
               Find quick answers to the most common questions about our laser cutting machines.
             </motion.p>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-3">
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
@@ -88,23 +93,27 @@ export default function FAQ() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ delay: i * 0.1, duration: 0.55 }}
-                className={`glass overflow-hidden rounded-xl transition-shadow ${isOpen ? "shadow-[0_20px_40px_-18px_rgba(11,91,245,0.4)]" : ""}`}
+                className={`glass overflow-hidden rounded-xl transition-shadow ${
+                  isOpen ? "shadow-[0_20px_40px_-18px_rgba(11,91,245,0.4)]" : ""
+                }`}
               >
                 <button
                   onClick={() => setOpen(isOpen ? -1 : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left"
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                 >
-                  <span className="text-[12.5px] font-bold text-ink">{f.q}</span>
+                  <span className="text-base font-bold text-ink sm:text-[17px]">{f.q}</span>
                   <motion.span
                     animate={{
                       rotate: isOpen ? 180 : 0,
                       backgroundColor: isOpen ? "#0B5BF5" : "rgba(11,91,245,0)",
                     }}
                     transition={{ type: "spring", stiffness: 260, damping: 18 }}
-                    className={`grid h-6 w-6 shrink-0 place-items-center rounded-full ${isOpen ? "text-white" : "text-brand"}`}
+                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-full ${
+                      isOpen ? "text-white" : "text-brand"
+                    }`}
                   >
-                    <ChevronDown size={14} />
+                    <ChevronDown size={18} />
                   </motion.span>
                 </button>
                 <AnimatePresence initial={false}>
@@ -115,7 +124,9 @@ export default function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <p className="px-4 pb-3.5 text-[11.5px] leading-relaxed text-ink/65">{f.a}</p>
+                      <p className="px-5 pb-5 text-[15px] leading-relaxed text-ink/65 sm:text-base">
+                        {f.a}
+                      </p>
                     </motion.div>
                   )}
                 </AnimatePresence>
