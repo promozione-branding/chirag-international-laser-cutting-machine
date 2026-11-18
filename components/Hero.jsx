@@ -45,7 +45,7 @@ function MagneticLetter({ char, color, index }) {
 
 const lines = [
   { text: "Next-Gen" },
-  { text: "Laser Cutting", from: "#19BFFF", to: "#0875FF" },
+  { text: "Laser Cutting", from: "#19BFFF", to: "#7fe3f5" },
   { text: "Solutions" },
 ];
 

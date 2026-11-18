@@ -199,7 +199,7 @@ export default function Categories() {
             <span className="h-[3px] w-12 rounded-full bg-[#1559e6]" />
           </div>
           <h2 className="mt-3 text-[44px] font-bold leading-tight tracking-tight text-[#0b1b4a] md:text-[60px]">
-            Machine <span className="text-[#1a66ff]">Categories</span>
+            Machine <span className="text-[#7fe3f5]">Categories</span>
           </h2>
           <p className="mx-auto mt-2 max-w-[760px] text-[18px] font-medium leading-snug text-slate-500">
             A complete range of laser machines for cutting, engraving, marking, and welding applications across

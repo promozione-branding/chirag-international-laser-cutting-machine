@@ -5,10 +5,15 @@ import { ArrowUpRight } from "lucide-react";
 import { LaserNozzle, LaserSparks } from "./art/LaserArt";
 import Magnetic from "./ui/Magnetic";
 import QuoteModal from "./QuoteModal";
+
+const BRAND = "#22b8d9";
+const BRAND_SOFT = "#7fe3f5";
+
 const w1 = "M0 140 C240 80 480 200 720 140 C960 80 1200 200 1440 140";
 const w2 = "M0 150 C240 210 480 90 720 150 C960 210 1200 90 1440 150";
 const w3 = "M0 110 C300 170 560 60 820 110 C1080 160 1260 70 1440 110";
 const w4 = "M0 120 C300 60 560 170 820 120 C1080 70 1260 160 1440 120";
+
 const particles = Array.from({ length: 22 }, (_, i) => ({
   left: `${(i * 4.7 + 3) % 100}%`,
   top: `${(i * 23 + 11) % 100}%`,
@@ -16,18 +21,21 @@ const particles = Array.from({ length: 22 }, (_, i) => ({
   dur: 4 + (i % 5),
   delay: (i % 7) * 0.5,
 }));
+
 export default function CTA() {
-    const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(false);
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
   const bgY2 = useTransform(scrollYProgress, [0, 1], [-15, 15]);
+
   return (
     <section
       id="contact"
       ref={ref}
-      className="relative mt-10 overflow-hidden bg-gradient-to-r from-[#051540] via-[#0a2f86] to-[#0b5bf5]"
+      className="relative mt-10 overflow-hidden bg-gradient-to-r from-[#2d3748] via-[#4a5568] to-[#718096]"
     >
+      {/* flowing waves */}
       <motion.div style={{ y: bgY }} className="pointer-events-none absolute inset-0">
         <svg
           className="h-full w-full"
@@ -38,9 +46,9 @@ export default function CTA() {
         >
           <defs>
             <linearGradient id="ctaW" x1="0" x2="1">
-              <stop offset="0" stopColor="#7cb4ff" stopOpacity="0" />
-              <stop offset=".5" stopColor="#9fcbff" stopOpacity=".7" />
-              <stop offset="1" stopColor="#7cb4ff" stopOpacity="0" />
+              <stop offset="0" stopColor={BRAND_SOFT} stopOpacity="0" />
+              <stop offset=".5" stopColor={BRAND_SOFT} stopOpacity=".7" />
+              <stop offset="1" stopColor={BRAND_SOFT} stopOpacity="0" />
             </linearGradient>
           </defs>
           <motion.path
@@ -60,6 +68,7 @@ export default function CTA() {
         </svg>
       </motion.div>
 
+      {/* floating particles */}
       <motion.div style={{ y: bgY2 }} className="pointer-events-none absolute inset-0">
         {particles.map((p, i) => (
           <motion.span
@@ -77,6 +86,7 @@ export default function CTA() {
         <LaserSparks className="absolute inset-0 h-full w-full" />
       </div>
 
+      {/* laser trail */}
       <svg
         className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
         viewBox="0 0 1440 260"
@@ -86,8 +96,8 @@ export default function CTA() {
       >
         <defs>
           <linearGradient id="trailG" x1="0" x2="1">
-            <stop offset="0" stopColor="#ffd27a" stopOpacity="0" />
-            <stop offset=".4" stopColor="#ffb13b" />
+            <stop offset="0" stopColor={BRAND} stopOpacity="0" />
+            <stop offset=".4" stopColor={BRAND} />
             <stop offset="1" stopColor="#ffffff" />
           </linearGradient>
         </defs>
@@ -135,17 +145,19 @@ export default function CTA() {
           transition={{ type: "spring", stiffness: 160, damping: 14, delay: 0.3 }}
         >
           <Magnetic strength={0.4}>
-      <button
-    type="button"
-    onClick={() => setQuoteOpen(true)}
-    className="btn-primary !py-2.5 !text-[13px]"
-  >
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
+              className="btn-primary !py-2.5 !text-[13px]"
+              
+            >
               Request a Quote <ArrowUpRight size={16} />
             </button>
           </Magnetic>
         </motion.div>
       </div>
-                  <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </section>
   );
 }
