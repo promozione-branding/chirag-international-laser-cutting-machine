@@ -12,9 +12,9 @@ import {
   Users,
 } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
-import ContactStrip from "@/components/ui/ContactStrip";
 import { categories } from "@/lib/products";
 import VisionMission from "@/components/VisionMission";
+import CTA from "@/components/CTA";
 
 export const metadata = {
   title: "About Us",
@@ -184,7 +184,7 @@ export default function AboutPage() {
         </div>
       </section>
       <VisionMission />
-      <ContactStrip />
+      <CTA/>
     </div>
   );
 }

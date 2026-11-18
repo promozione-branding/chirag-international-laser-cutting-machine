@@ -1,6 +1,7 @@
 import ProductCatalogue from "@/components/machines/ProductCatalogue";
 import ContactStrip from "@/components/machines/ContactStrip";
 import PageHero from "@/components/ui/PageHero";
+import CTA from "@/components/CTA";
 
 export const metadata = {
   title: "Our Products",
@@ -19,7 +20,7 @@ export default function MachinesPage() {
         bannerImage="/all_products_bann.png"
       />
       <ProductCatalogue />
-      <ContactStrip />
+       <CTA/>
     </div>
   );
 }
