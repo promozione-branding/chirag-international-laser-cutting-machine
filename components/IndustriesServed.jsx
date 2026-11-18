@@ -23,11 +23,6 @@ const STEP_EASE = [0.65, 0, 0.35, 1];
 const DARK = "#16222e";
 const ACCENT = "#0875FF";
 
-/* ------------------------------------------------------------------ */
-/*  Geometry: every card is the SAME ring-sector as the Industrial     */
-/*  card, so together they form one perfect arc around the circle.     */
-/*  Angles are measured clockwise from 12 o'clock.                     */
-/* ------------------------------------------------------------------ */
 const CX = 980;
 const CY = 668;
 const R_IN = 290;
@@ -78,16 +73,7 @@ const CARDS = [
   { key: "furniture", Icon: Armchair, lines: ["Furniture", "& Interiors"] },
 ];
 
-/*
-  Track position t (0..4) -> angle / scale / opacity.
-  Slots (deg): -96 (bottom-left), -48 (upper-left), [0 = Industrial, fixed],
-               +48 (upper-right), +96 (bottom-right).
-  - 0 -> 1 : bottom-left  -> upper-left
-  - 1 -> 2 : upper-left   -> upper-right, sliding BEHIND the Industrial card
-  - 2 -> 3 : upper-right  -> bottom-right
-  - 3 -> 4 : bottom-right fades out (shrinks back), re-enters from behind
-             at bottom-left. The bottom of the circle stays empty.
-*/
+
 function cardState(t) {
   const j = Math.min(3, Math.floor(t));
   const f = t - j;
@@ -415,10 +401,8 @@ export default function IndustriesServed() {
               strokeWidth="1.5"
             />
 
-            {/* ---------- orbiting cards (drawn first, so they slide BEHIND Industrial) ---------- */}
             <OrbitCards />
 
-            {/* ---------- Industrial Manufacturing: fixed at the top of the arc ---------- */}
             <motion.g
               style={fb}
               initial={{ opacity: 0, y: -50, scale: 0.9 }}
@@ -480,17 +464,7 @@ export default function IndustriesServed() {
               <text x={PX} y="310" textAnchor="middle" fontSize="32" fontWeight="700" fill="#fff">
                 Manufacturing
               </text>
-              <motion.rect
-                x={PX - 34}
-                y="328"
-                height="5"
-                rx="2.5"
-                fill="#0875FF"
-                initial={{ width: 0 }}
-                whileInView={{ width: 68 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.9, delay: 1, ease: EASE }}
-              />
+              
             </motion.g>
 
             {/* ---------- centre circle ---------- */}
@@ -544,15 +518,7 @@ export default function IndustriesServed() {
                 transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
               />
 
-              {/* orbiting dot */}
-              <motion.g
-                style={{ transformOrigin: `${CX}px ${CY}px` }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
-              >
-                <circle cx={CX} cy={CY - 250} r="7" fill={ACCENT} />
-                <circle cx={CX} cy={CY - 250} r="14" fill={ACCENT} opacity="0.25" />
-              </motion.g>
+              
             </motion.g>
 
 
