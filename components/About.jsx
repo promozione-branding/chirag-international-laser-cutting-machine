@@ -5,12 +5,16 @@ import { ArrowRight, CalendarDays, Cog, Gem, Globe, Headphones, Package, Users }
 import LaserHeadStatic from "./art/LaserArt";
 import Magnetic from "./ui/Magnetic";
 
-const IMAGE_SRC = "about_.png";
+const IMAGE_SRC = "/about_.png";
 
-const INK = "#0a1233";
-const BRAND = "#0a5cff";
-const MUTED = "#5f6b85";
-const LINE = "rgba(120,140,185,.28)";
+// ---- dark steel theme -------------------------------------------------
+const INK = "#e8eef4"; // main text on dark
+const BRAND = "#22b8d9"; // laser cyan accent
+const BRAND_SOFT = "#7fe3f5"; // lighter cyan for gradients
+const MUTED = "#9fb0c0"; // secondary text
+const LINE = "rgba(255,255,255,.12)";
+const BG_FROM = "#0a121a";
+const BG_TO = "#16222e";
 const EASE = [0.16, 1, 0.3, 1];
 
 function Odometer({ value, suffix = "+" }) {
@@ -75,23 +79,24 @@ export default function About() {
     <section
       id="about"
       className="relative overflow-hidden pb-10 pt-12"
-      style={{
-        background:
-          "radial-gradient(900px 420px at 85% 0%,rgba(120,165,255,.35),transparent 60%)," +
-          "radial-gradient(700px 400px at 0% 100%,rgba(255,255,255,.9),transparent 60%)," +
-          "linear-gradient(135deg,#f7faff 0%,#ebf2ff 50%,#e1eaff 100%)",
-      }}
+      style={{ background: `linear-gradient(160deg, ${BG_FROM} 0%, ${BG_TO} 100%)` }}
     >
+      {/* background decoration */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
+        {/* soft cyan glow */}
+        <div
+          className="absolute -right-24 top-10 h-[420px] w-[520px] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(closest-side, rgba(34,184,217,.18), rgba(34,184,217,0))" }}
+        />
         <div
           className="absolute -top-8 right-[9%] hidden h-[330px] w-[20%] lg:block"
-          style={{ transform: "skewX(-24deg)", background: "linear-gradient(180deg,rgba(140,180,255,.55),rgba(140,180,255,0))" }}
+          style={{ transform: "skewX(-24deg)", background: "linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0))" }}
         />
-        <div className="absolute left-[60.5%] top-0 hidden h-[260px] w-[1.5px] origin-top bg-white lg:block" style={{ transform: "rotate(28deg)" }} />
-        <div className="absolute left-[72%] top-0 hidden h-[150px] w-[1.5px] origin-top bg-white/90 lg:block" style={{ transform: "rotate(24deg)" }} />
+        <div className="absolute left-[60.5%] top-0 hidden h-[260px] w-[1.5px] origin-top bg-white/10 lg:block" style={{ transform: "rotate(28deg)" }} />
+        <div className="absolute left-[72%] top-0 hidden h-[150px] w-[1.5px] origin-top bg-white/10 lg:block" style={{ transform: "rotate(24deg)" }} />
         <div
           className="absolute -left-10 bottom-0 h-[180px] w-[300px]"
-          style={{ transform: "skewY(28deg)", background: "linear-gradient(90deg,rgba(255,255,255,.6),rgba(255,255,255,0))" }}
+          style={{ transform: "skewY(28deg)", background: "linear-gradient(90deg,rgba(34,184,217,.08),rgba(34,184,217,0))" }}
         />
       </div>
 
@@ -124,7 +129,7 @@ export default function About() {
               Through{" "}
               <span
                 style={{
-                  background: "linear-gradient(90deg,#0a5cff,#2f80ff)",
+                  background: `linear-gradient(90deg,${BRAND},${BRAND_SOFT})`,
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
@@ -140,7 +145,7 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.2, ease: EASE }}
               className="mt-4 max-w-[460px] text-[14.5px] leading-[1.65]"
-              style={{ color: MUTED }}
+              style={{ color: "white" }}
             >
               We are a leading manufacturer and supplier of high-performance laser cutting machines,
               delivering precision, productivity, and reliability to industries worldwide.
@@ -164,8 +169,8 @@ export default function About() {
                       whileHover={{ scale: 1.08, rotate: -3 }}
                       className="flex h-[46px] w-[46px] shrink-0 cursor-default items-center justify-center rounded-[14px]"
                       style={{
-                        background: "linear-gradient(145deg,#ffffff,#dbe7ff)",
-                        boxShadow: "0 6px 14px -6px rgba(10,92,255,.35), inset 0 0 0 1px rgba(255,255,255,.9)",
+                        background: "linear-gradient(145deg,#243342,#16222e)",
+                        boxShadow: "0 6px 14px -6px rgba(0,0,0,.6), 0 0 0 1px rgba(34,184,217,.25), inset 0 1px 0 rgba(255,255,255,.08)",
                       }}
                     >
                       <Icon size={22} strokeWidth={1.7} style={{ color: BRAND }} />
@@ -190,10 +195,11 @@ export default function About() {
               <Magnetic>
                 <a
                   href="#story"
-                  className="inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-[15px] font-bold text-white transition-transform hover:scale-[1.03]"
+                  className="inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-[15px] font-bold transition-transform hover:scale-[1.03]"
                   style={{
-                    background: "linear-gradient(180deg,#2f7bff 0%,#0a5cff 100%)",
-                    boxShadow: "0 12px 24px -8px rgba(10,92,255,.65), inset 0 1px 0 rgba(255,255,255,.35)",
+                    color: "#05202a",
+                    background: `linear-gradient(180deg,${BRAND_SOFT} 0%,${BRAND} 100%)`,
+                    boxShadow: "0 12px 24px -8px rgba(34,184,217,.55), inset 0 1px 0 rgba(255,255,255,.5)",
                   }}
                 >
                   Learn More <ArrowRight size={16} strokeWidth={2.4} />
@@ -209,6 +215,7 @@ export default function About() {
             transition={{ duration: 1.2, ease: EASE }}
             className="relative mt-8 h-[260px] w-full sm:h-[320px] lg:absolute lg:-top-2 lg:right-[-3.5%] lg:mt-0 lg:h-[440px] lg:w-[56%]"
           >
+            {/* back slab */}
             <motion.div
               aria-hidden
               initial={{ opacity: 0, x: 90 }}
@@ -219,11 +226,12 @@ export default function About() {
               style={{
                 skewX: -22,
                 background:
-                  "linear-gradient(180deg,#1a6ef5 0%,#3b82f6 45%,rgba(147,187,255,.5) 80%,rgba(147,187,255,0) 100%)",
-                boxShadow: "0 20px 40px -18px rgba(10,92,255,.55)",
+                  "linear-gradient(180deg,#2b3a48 0%,#1e2b37 45%,rgba(30,43,55,.5) 80%,rgba(30,43,55,0) 100%)",
+                boxShadow: "0 20px 40px -18px rgba(0,0,0,.6)",
               }}
             />
 
+            {/* glass slab */}
             <motion.div
               aria-hidden
               initial={{ opacity: 0, x: 70 }}
@@ -234,14 +242,15 @@ export default function About() {
               style={{
                 skewX: -23,
                 background:
-                  "linear-gradient(135deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,.35) 55%,rgba(255,255,255,.7) 100%)",
+                  "linear-gradient(135deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 55%,rgba(34,184,217,.10) 100%)",
                 backdropFilter: "blur(14px)",
                 WebkitBackdropFilter: "blur(14px)",
                 boxShadow:
-                  "0 30px 50px -25px rgba(30,70,160,.35), 0 0 0 1px rgba(255,255,255,.95), inset 0 1px 0 #fff, inset 0 -20px 40px -20px rgba(160,190,255,.45)",
+                  "0 30px 50px -25px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.12), inset 0 -20px 40px -20px rgba(0,0,0,.25)",
               }}
             />
 
+            {/* image frame */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0, y: reduce ? 0 : [0, -6, 0] }}
@@ -250,9 +259,9 @@ export default function About() {
               className="absolute bottom-[38px] left-[3%] right-[7%] top-0 overflow-hidden rounded-[36px]"
               style={{
                 skewX: -23,
-                background: "linear-gradient(135deg,#0b1d4a,#0d2a6e 50%,#061336)",
+                background: "linear-gradient(135deg,#0a121a,#16222e 50%,#05090d)",
                 boxShadow:
-                  "0 40px 70px -28px rgba(8,36,120,.6), 0 0 0 1px rgba(255,255,255,.55), 0 0 0 5px rgba(255,255,255,.18)",
+                  "0 40px 70px -28px rgba(0,0,0,.8), 0 0 0 1px rgba(34,184,217,.25), 0 0 0 5px rgba(34,184,217,.06)",
               }}
             >
               <div className="absolute inset-y-0 -left-[22%] w-[145%]" style={{ transform: "skewX(23deg)" }}>
@@ -267,16 +276,15 @@ export default function About() {
                   style={{
                     background:
                       "linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 30%)," +
-                      "radial-gradient(120% 90% at 55% 55%,rgba(0,0,0,0) 55%,rgba(3,12,40,.45) 100%)",
+                      "radial-gradient(120% 90% at 55% 55%,rgba(0,0,0,0) 55%,rgba(5,9,13,.55) 100%)",
                   }}
                 />
               </div>
             </motion.div>
-
-     
           </motion.div>
         </div>
 
+        {/* stats */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -284,15 +292,16 @@ export default function About() {
           transition={{ duration: 0.9, delay: 0.2, ease: EASE }}
           className="relative z-10 mt-8"
         >
-          <motion.div
-            animate={reduce ? undefined : { y: [0, -5, 0] }}
-            transition={reduce ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="rounded-[28px] px-6 py-6 backdrop-blur-xl sm:px-8"
-            style={{
-              background: "linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.72))",
-              boxShadow: "0 24px 50px -24px rgba(30,70,160,.4), 0 0 0 1px rgba(255,255,255,.9), inset 0 1px 0 #fff",
-            }}
-          >
+         <motion.div
+  animate={reduce ? undefined : { y: [0, -5, 0] }}
+  transition={reduce ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
+  className="rounded-[28px] px-6 py-6 backdrop-blur-xl sm:px-8"
+  style={{
+    background: "linear-gradient(180deg, rgba(75, 85, 99, 0.92), rgba(55, 65, 81, 0.88))",
+    boxShadow:
+      "0 24px 50px -24px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.10)",
+  }}
+>
             <div className="grid grid-cols-2 gap-y-6 lg:flex lg:items-center lg:justify-between">
               {stats.map(({ icon: Icon, value, label }, i) => (
                 <div key={label} className="flex items-center lg:flex-1">

@@ -15,6 +15,7 @@ import PageHero from "@/components/ui/PageHero";
 import { categories } from "@/lib/products";
 import VisionMission from "@/components/VisionMission";
 import CTA from "@/components/CTA";
+import Story from "@/components/Story";
 
 export const metadata = {
   title: "About Us",
@@ -183,6 +184,7 @@ export default function AboutPage() {
           </ul>
         </div>
       </section>
+      <Story />
       <VisionMission />
       <CTA/>
     </div>

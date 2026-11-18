@@ -184,10 +184,10 @@ export default function Categories() {
     <section
       id="machines"
       style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
-      className="relative overflow-hidden bg-gradient-to-b from-[#f9fbff] via-[#f1f6ff] to-[#e9f1ff] pb-24 pt-14"
+      className="relative overflow-hidden pb-24 pt-14 bg-white"
     >
-      <div aria-hidden className="pointer-events-none absolute -left-40 top-0 h-[420px] w-[420px] rounded-full bg-[#dbe8ff]/60 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -right-40 top-10 h-[420px] w-[520px] rounded-full bg-[#cfe0ff]/60 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-40 top-0 h-[420px] w-[420px] rounded-full" />
+      <div aria-hidden className="pointer-events-none absolute -right-40 top-10 h-[420px] w-[520px] rounded-full" />
 
       <div className="relative mx-auto w-full max-w-[1800px] px-4 lg:px-10">
         <div className="text-center">

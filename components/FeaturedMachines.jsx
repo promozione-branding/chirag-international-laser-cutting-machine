@@ -81,36 +81,32 @@ export default function FeaturedMachines() {
   return (
     <section
       id="featured"
-      className="relative overflow-hidden py-20 sm:py-24 lg:py-28"
+      className="relative overflow-hidden py-10 sm:py-14 lg:py-18"
     >
-      <div className="container-x">
+      <div className="w-[90%] mx-auto">
 
-        <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0a2a73] via-[#082159] to-[#051540] px-5 py-12 shadow-[0_30px_70px_-30px_rgba(5,20,63,0.5)] sm:rounded-[32px] sm:px-10 sm:py-16">
+        <div className="relative overflow-hidden rounded-[28px] border border-gray-200 bg-[#f5f6f8] px-5 py-12 shadow-[0_30px_70px_-40px_rgba(15,23,42,0.25)] sm:rounded-[32px] sm:px-10 sm:py-16">
 
           <div
-            className="pointer-events-none absolute inset-0 opacity-[0.06]"
+            className="pointer-events-none absolute inset-0 opacity-[0.05]"
             style={{
-              backgroundImage:
-                "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-              backgroundSize: "36px 36px",
+        backgroundSize: "36px 36px",
             }}
           />
-
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-[100px]" />
 
           <div className="relative grid items-center gap-10 lg:grid-cols-[0.85fr_1.5fr_0.85fr] lg:gap-8">
 
             <div className="relative z-10">
 
-              <div className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-300">
+              <div className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0866F5]">
                 Featured Machines
               </div>
 
-              <h2 className="mt-4 text-3xl font-extrabold leading-tight text-white sm:text-[38px]">
+              <h2 className="mt-4 text-3xl font-extrabold leading-tight text-gray-900 sm:text-[38px]">
                 Our High-Performance Machines
               </h2>
 
-              <p className="mt-4 max-w-xs text-[14px] leading-[1.9] text-white/70">
+              <p className="mt-4 max-w-xs text-[14px] leading-[1.9] text-gray-600">
                 Explore our most popular laser cutting, marking
                 and engraving machines designed for precision,
                 speed, and long-term performance.
@@ -119,7 +115,7 @@ export default function FeaturedMachines() {
               <Magnetic className="mt-8">
                 <a
                   href="/machines"
-                  className="inline-flex items-center gap-3 rounded-full bg-[#0866F5] px-6 py-3 text-[13px] font-semibold text-white shadow-lg shadow-blue-500/20 transition-colors hover:bg-blue-400"
+                  className="inline-flex items-center gap-3 rounded-full bg-[#0866F5] px-6 py-3 text-[13px] font-semibold text-white shadow-lg shadow-blue-500/20 transition-colors hover:bg-[#0653c9]"
                 >
                   View All Machines
                   <ArrowRight size={16} />
@@ -130,7 +126,7 @@ export default function FeaturedMachines() {
 
             <div className="relative min-w-0">
 
-              <div className="absolute inset-x-[8%] top-[10%] bottom-[10%] rounded-full bg-blue-400/10 blur-3xl" />
+              <div className="absolute inset-x-[8%] top-[10%] bottom-[10%] rounded-full bg-white blur-3xl" />
 
               <div className="relative h-[280px] sm:h-[380px] lg:h-[420px]">
 
@@ -160,7 +156,7 @@ export default function FeaturedMachines() {
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.35)]"
+                          className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(15,23,42,0.2)]"
                           loading="lazy"
                         />
 
@@ -179,8 +175,8 @@ export default function FeaturedMachines() {
                     onClick={() => swiper.current?.slideToLoop(index)}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
                       index === active
-                        ? "w-8 bg-blue-400"
-                        : "w-1.5 bg-white/35 hover:bg-white/70"
+                        ? "w-8 bg-[#0866F5]"
+                        : "w-1.5 bg-gray-300 hover:bg-gray-400"
                     }`}
                   />
                 ))}
@@ -195,30 +191,30 @@ export default function FeaturedMachines() {
                 className="animate-[fadeIn_0.4s_ease-out]"
               >
 
-                <span className="inline-block rounded-full border border-blue-300/30 bg-blue-500/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-200">
+                <span className="inline-block rounded-full border border-gray-300 bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-700">
                   {machine.badge}
                 </span>
 
-                <h3 className="mt-5 text-[23px] font-bold leading-snug text-white sm:text-[26px]">
+                <h3 className="mt-5 text-[23px] font-bold leading-snug text-gray-900 sm:text-[26px]">
                   {machine.name}
                 </h3>
 
-                <div className="mt-3 text-[15px] font-bold text-blue-300">
+                <div className="mt-3 text-[15px] font-bold text-[#0866F5]">
                   {machine.price}
                 </div>
 
-                <div className="my-6 h-px w-full bg-white/15" />
+                <div className="my-6 h-px w-full bg-gray-200" />
 
                 <ul className="space-y-4">
                   {machine.feats.map((feature) => (
                     <li
                       key={feature}
-                      className="flex items-start gap-3 text-[13px] leading-relaxed text-white/80"
+                      className="flex items-start gap-3 text-[13px] leading-relaxed text-gray-700"
                     >
-                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-blue-500/20">
+                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white shadow-sm ring-1 ring-gray-200">
                         <Check
                           size={12}
-                          className="text-blue-300"
+                          className="text-[#0866F5]"
                         />
                       </span>
 
@@ -234,7 +230,7 @@ export default function FeaturedMachines() {
                 <button
                   aria-label="Previous machine"
                   onClick={() => swiper.current?.slidePrev()}
-                  className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition-all hover:border-blue-400 hover:bg-blue-500"
+                  className="grid h-11 w-11 place-items-center rounded-full border border-gray-300 text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white"
                 >
                   <ArrowLeft size={18} />
                 </button>
@@ -242,7 +238,7 @@ export default function FeaturedMachines() {
                 <button
                   aria-label="Next machine"
                   onClick={() => swiper.current?.slideNext()}
-                  className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition-all hover:border-blue-400 hover:bg-blue-500"
+                  className="grid h-11 w-11 place-items-center rounded-full border border-gray-300 text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white"
                 >
                   <ArrowRight size={18} />
                 </button>

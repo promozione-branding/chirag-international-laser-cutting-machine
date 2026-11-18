@@ -131,13 +131,13 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
       >
         <Connector side={side} index={index} reduce={reduce} />
 
-        <div
-          className={`relative -skew-x-[8deg] overflow-hidden rounded-[28px] ring-1 backdrop-blur transition-all duration-500 ${
-            active
-              ? "bg-white shadow-[0_28px_60px_-20px_rgba(26,102,255,0.45)] ring-[#9cc2ff]"
-              : "bg-white/75 shadow-[0_22px_50px_-26px_rgba(37,99,235,0.35)] ring-white"
-          }`}
-        >
+       <div
+  className={`relative -skew-x-[8deg] overflow-hidden rounded-[28px] ring-1 backdrop-blur transition-all duration-500 ${
+    active
+      ? "bg-[#e5e7eb] shadow-[0_28px_60px_-20px_rgba(0,0,0,0.3)] ring-[#9cc2ff]"
+      : "bg-[#f1f2f4] shadow-[0_22px_50px_-26px_rgba(0,0,0,0.25)] ring-black/10"
+  }`}
+>
           {active && (
             <motion.span
               key={`shine-${index}`}
@@ -145,7 +145,7 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
               initial={{ x: "-130%" }}
               animate={{ x: "260%" }}
               transition={{ duration: 1.3, ease: "easeInOut" }}
-              className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-[#cfe0ff]/80 to-transparent"
+              className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent"
             />
           )}
 
@@ -161,7 +161,7 @@ function FeatureCard({ item, index, active, onEnter, reduce }) {
                 scale: { type: "spring", stiffness: 260, damping: 16 },
                 rotate: { duration: 0.7 },
               }}
-              className="grid h-[60px] w-[60px] shrink-0 place-items-center rounded-2xl bg-white text-[#1559e6] shadow-[0_10px_24px_-10px_rgba(37,99,235,0.4)] ring-1 ring-[#e3edff] 2xl:h-[76px] 2xl:w-[76px]"
+              className="grid h-[60px] w-[60px] shrink-0 place-items-center rounded-2xl bg-white text-[#1559e6] shadow-[0_10px_24px_-10px_rgba(0,0,0,0.25)] ring-1 ring-black/10 2xl:h-[76px] 2xl:w-[76px]"
             >
               <Icon className="h-[30px] w-[30px] 2xl:h-[38px] 2xl:w-[38px]" strokeWidth={1.7} />
             </motion.div>
@@ -223,13 +223,13 @@ function Portal({ reduce }) {
       transition={{ duration: 1.2, ease: EASE }}
       className="relative mx-auto h-[400px] w-[340px] sm:h-[500px] sm:w-[420px] xl:h-[460px] xl:w-[360px] 2xl:h-[560px] 2xl:w-[460px]"
     >
-      <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[130%] -translate-x-1/2 rounded-[50%] border border-[#cfe0ff] bg-[radial-gradient(ellipse_at_center,rgba(59,139,255,0.25),transparent_70%)]" />
-      <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[105%] -translate-x-1/2 rounded-[50%] border border-[#b9d3ff]/80" />
+      <span aria-hidden className="absolute bottom-2 left-1/2 h-[90px] w-[130%] -translate-x-1/2 rounded-[50%] border border-black/10 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.06),transparent_70%)]" />
+      <span aria-hidden className="absolute bottom-6 left-1/2 h-[70px] w-[105%] -translate-x-1/2 rounded-[50%] border border-black/10" />
       {!reduce &&
         [0, 1.6].map((d) => (
           <span key={d} aria-hidden className="pointer-events-none absolute bottom-6 left-1/2 h-[70px] w-[105%] -translate-x-1/2">
             <motion.span
-              className="block h-full w-full rounded-[50%] border border-[#6aa5ff]"
+              className="block h-full w-full rounded-[50%] border border-black/25"
               animate={{ scale: [0.7, 1.15], opacity: [0.7, 0] }}
               transition={{ duration: 3.2, repeat: Infinity, delay: d, ease: "easeOut" }}
             />
@@ -244,7 +244,7 @@ function Portal({ reduce }) {
         >
           <motion.div
             aria-hidden
-            className="absolute -inset-[14%] rounded-full bg-[radial-gradient(circle,rgba(59,139,255,0.45),transparent_65%)]"
+            className="absolute -inset-[14%] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.10),transparent_65%)]"
             animate={reduce ? undefined : { scale: [1, 1.1, 1], opacity: [0.55, 1, 0.55] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -274,8 +274,8 @@ function Portal({ reduce }) {
             <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1a66ff] shadow-[0_0_14px_4px_rgba(26,102,255,0.7)]" />
           </motion.div>
 
-          <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#e9f2ff] to-[#cfe2ff] p-[14px] shadow-[0_0_70px_rgba(59,139,255,0.45),inset_0_0_30px_rgba(255,255,255,0.9)] ring-1 ring-white">
-            <div className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-[#1b3d7a] via-[#0b2352] to-[#06122e]">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#f7f7f8] to-[#e2e4e8] p-[14px] shadow-[0_20px_60px_rgba(0,0,0,0.2),inset_0_0_30px_rgba(255,255,255,0.9)] ring-1 ring-black/10">
+            <div className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-[#2b2b2b] via-[#1a1a1a] to-[#0d0d0d]">
               {!failed && (
                 <motion.img
                   src="/why_.png"
@@ -290,7 +290,7 @@ function Portal({ reduce }) {
               {!reduce && (
                 <motion.span
                   aria-hidden
-                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent"
                   initial={{ x: "-150%" }}
                   animate={{ x: "420%" }}
                   transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
@@ -302,21 +302,21 @@ function Portal({ reduce }) {
       </div>
 
       <motion.div
-        className="absolute bottom-[26px] left-1/2 h-[56px] w-[84%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-white via-[#dbe9ff] to-[#8fb8ff]"
+        className="absolute bottom-[26px] left-1/2 h-[56px] w-[84%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-white via-[#eceef1] to-[#c4c8cf]"
         animate={
           reduce
             ? undefined
             : {
                 boxShadow: [
-                  "0 0 30px rgba(37,120,255,0.4)",
-                  "0 0 70px rgba(37,120,255,0.8)",
-                  "0 0 30px rgba(37,120,255,0.4)",
+                  "0 0 30px rgba(0,0,0,0.12)",
+                  "0 0 60px rgba(0,0,0,0.25)",
+                  "0 0 30px rgba(0,0,0,0.12)",
                 ],
               }
         }
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
       />
-      <div className="absolute bottom-[44px] left-1/2 h-[34px] w-[78%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#f4f8ff] to-[#cfe0ff]" />
+      <div className="absolute bottom-[44px] left-1/2 h-[34px] w-[78%] -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#fafafa] to-[#e2e4e8]" />
 
       {!reduce &&
         sparks.map((s, i) => (
@@ -350,18 +350,18 @@ export default function WhyChooseUs() {
   return (
     <section
       style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
-      className="relative overflow-x-clip bg-gradient-to-b from-[#f4f8ff] via-[#eaf2ff] to-[#e3edff] py-16"
+      className="relative overflow-x-clip bg-white py-16"
     >
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -left-40 -top-24 h-[420px] w-[520px] rounded-[50%] bg-[#d6e5ff]/70 blur-2xl"
+        className="pointer-events-none absolute -left-40 -top-24 h-[420px] w-[520px] rounded-[50%] bg-black/[0.04] blur-2xl"
         style={{ rotate: -20 }}
         animate={reduce ? undefined : { x: [0, 50, 0], y: [0, 24, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -right-32 h-[380px] w-[560px] rounded-[50%] bg-[#cfe0ff]/70 blur-2xl"
+        className="pointer-events-none absolute -bottom-40 -right-32 h-[380px] w-[560px] rounded-[50%] bg-black/[0.04] blur-2xl"
         animate={reduce ? undefined : { x: [0, -50, 0], y: [0, -24, 0] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -394,7 +394,7 @@ export default function WhyChooseUs() {
             />
           </div>
 
-          <h2 className="mt-3 text-[34px] font-bold leading-tight tracking-tight text-[#0b1b4a] md:text-[56px]">
+          {/* <h2 className="mt-3 text-[34px] font-bold leading-tight tracking-tight text-[#0b1b4a] md:text-[56px]">
             <Words text="Features That Make the" base={0.15} />
             <span className="inline-block overflow-hidden align-bottom">
               <motion.span
@@ -417,7 +417,7 @@ export default function WhyChooseUs() {
                 </motion.span>
               </motion.span>
             </span>
-          </h2>
+          </h2> */}
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}

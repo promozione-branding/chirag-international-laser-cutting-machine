@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion } from "framer-motion";
@@ -67,7 +66,7 @@ function mix(from, to, t) {
 export default function Hero() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   return (
-    <section className="relative isolate min-h-[720px] overflow-hidden bg-[#03152f] lg:min-h-[780px]">
+    <section className="relative isolate min-h-[720px] overflow-hidden bg-[#0b0e14] lg:min-h-[780px]">
 
       <div
         className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
@@ -76,9 +75,9 @@ export default function Hero() {
         }}
       />
 
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#03152f]/95 via-[#03152f]/75 to-[#03152f]/5" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0b0e14]/95 via-[#0b0e14]/75 to-[#0b0e14]/5" />
 
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#03152f]/50 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#0b0e14]/50 to-transparent" />
 
       <div className="container-x relative grid min-h-[720px] items-center gap-10 py-24 lg:min-h-[780px] lg:grid-cols-[1fr_1fr] lg:py-32">
 
@@ -88,10 +87,10 @@ export default function Hero() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#62c9ff]"
+            className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/70"
           >
-            Precision <span className="mx-2 text-white/50">/</span>
-            Speed <span className="mx-2 text-white/50">/</span>
+            Precision <span className="mx-2 text-white/30">/</span>
+            Speed <span className="mx-2 text-white/30">/</span>
             Reliability
           </motion.div>
 
@@ -168,12 +167,12 @@ export default function Hero() {
 
             <Magnetic>
               <button
-    type="button"
-    onClick={() => setQuoteOpen(true)}
-    className="btn-primary !py-2.5 !text-[13px]"
-  >
-    Get a Quote <ArrowUpRight size={14} />
-  </button>
+                type="button"
+                onClick={() => setQuoteOpen(true)}
+                className="btn-primary !py-2.5 !text-[13px]"
+              >
+                Get a Quote <ArrowUpRight size={14} />
+              </button>
             </Magnetic>
           </motion.div>
 
@@ -192,7 +191,7 @@ export default function Hero() {
                 <Icon
                   size={30}
                   strokeWidth={1.6}
-                  className="shrink-0 text-[#48bfff]"
+                  className="shrink-0 text-white/80"
                 />
 
                 <div className="leading-tight">
@@ -218,7 +217,7 @@ export default function Hero() {
           SCROLL TO EXPLORE
         </a>
       </div>
-            <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </section>
   );
 }
