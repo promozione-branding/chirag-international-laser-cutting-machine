@@ -45,9 +45,11 @@ function MagneticLetter({ char, color, index }) {
 
 const lines = [
   { text: "Next-Gen" },
-  { text: "Laser Cutting", from: "#19BFFF", to: "#7fe3f5" },
+  { text: "Laser Cutting", from: "#0875FF", to: "#65A8FF" },
   { text: "Solutions" },
 ];
+const BRAND = "#0875FF";
+const BRAND_SOFT = "#65A8FF";
 
 function mix(from, to, t) {
   const f = parseInt(from.slice(1), 16);
@@ -170,6 +172,11 @@ export default function Hero() {
                 type="button"
                 onClick={() => setQuoteOpen(true)}
                 className="btn-primary !py-2.5 !text-[13px]"
+                 style={{
+                    background: `linear-gradient(180deg,${BRAND_SOFT} 0%,${BRAND} 100%)`,
+                    boxShadow:
+                      "0 12px 24px -8px rgba(8,117,255,.38), inset 0 1px 0 rgba(255,255,255,.5)",
+                  }}
               >
                 Get a Quote <ArrowUpRight size={14} />
               </button>

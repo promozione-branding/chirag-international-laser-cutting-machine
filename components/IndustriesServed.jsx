@@ -9,9 +9,11 @@ import {
   Armchair,
 } from "lucide-react";
 
+
+
 const IMG = {
   center: "/why_.png",
-  industrial: "/industries/industrial.png", // NEW: add this file to /public/industries
+  industrial: "/industries/industrial.png", 
   automotive: "/industries/automotive.png",
   construction: "/industries/construction.png",
   leather: "/industries/leather.png",
@@ -19,8 +21,8 @@ const IMG = {
 };
 
 const EASE = [0.16, 1, 0.3, 1];
-const DARK = "#16222e"; // steel navy
-const ACCENT = "#22b8d9"; // laser cyan
+const DARK = "#16222e";
+const ACCENT = "#0875FF"; 
 
 const PATHS = {
   top: "M738 165 C735 140 760 120 790 108 C900 70 1090 70 1190 110 C1230 125 1245 145 1235 170 L1125 385 C1118 400 1100 402 1085 395 C1020 372 940 372 880 395 C862 402 845 398 838 385 Z",
@@ -112,10 +114,9 @@ export default function IndustriesServed() {
 
   return (
     <section className="relative overflow-hidden py-14 sm:py-20 lg:py-0">
-      {/* soft background glows */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] rounded-full bg-gradient-to-tr from-cyan-500/40 via-cyan-300/20 to-transparent blur-2xl"
+className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] rounded-full bg-gradient-to-tr from-gray-500/40 via-gray-300/20 to-transparent blur-2xl"
         animate={{ x: [0, 30, 0], y: [0, -14, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -125,7 +126,6 @@ export default function IndustriesServed() {
       />
 
       <div className="container-x relative mx-auto grid max-w-[1500px] items-center gap-10 px-5 sm:px-8 lg:min-h-[820px] lg:grid-cols-[minmax(0,0.36fr)_minmax(0,0.64fr)]">
-        {/* ---------------------------- LEFT ---------------------------- */}
         <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -135,7 +135,7 @@ export default function IndustriesServed() {
             className="flex items-center gap-4"
           >
             <motion.span
-              className="h-[3px] bg-[#22b8d9]"
+              className="h-[3px] bg-[#0875FF]"
               initial={{ width: 0 }}
               whileInView={{ width: 52 }}
               viewport={{ once: true }}
@@ -174,7 +174,7 @@ export default function IndustriesServed() {
             <motion.path
               d="M4 20 C50 4 120 2 186 14"
               fill="none"
-              stroke="#22b8d9"
+              stroke="#0875FF"
               strokeWidth="2"
               strokeLinecap="round"
               opacity="0.7"
@@ -201,9 +201,9 @@ export default function IndustriesServed() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
-            className="mt-12 flex items-center gap-4 border-l-[3px] border-[#22b8d9] pl-5"
+            className="mt-12 flex items-center gap-4 border-l-[3px] border-[#0875FF] pl-5"
           >
-            <span className="text-[64px] font-extrabold leading-none text-[#22b8d9]">
+            <span className="text-[64px] font-extrabold leading-none text-[#0875FF]">
               <CountUp to={5} />
             </span>
             <span
@@ -238,9 +238,9 @@ export default function IndustriesServed() {
                 <stop offset="0.55" stopColor="#eef1f4" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="arc-green" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#22b8d9" stopOpacity="0" />
-                <stop offset="0.5" stopColor="#22b8d9" />
-                <stop offset="1" stopColor="#22b8d9" stopOpacity="0.2" />
+                <stop offset="0" stopColor="#0875FF" stopOpacity="0" />
+                <stop offset="0.5" stopColor="#0875FF" />
+                <stop offset="1" stopColor="#0875FF" stopOpacity="0.2" />
               </linearGradient>
               {/* darkens the top photo so white text stays readable */}
               <linearGradient id="tint-top" x1="0" y1="0" x2="0" y2="1">
@@ -249,7 +249,7 @@ export default function IndustriesServed() {
               </linearGradient>
               <radialGradient id="spark" cx="0.5" cy="0.5" r="0.5">
                 <stop offset="0" stopColor="#d9f6ff" stopOpacity="0.95" />
-                <stop offset="1" stopColor="#22b8d9" stopOpacity="0" />
+                <stop offset="1" stopColor="#0875FF" stopOpacity="0" />
               </radialGradient>
               <filter id="soft" x="-20%" y="-20%" width="140%" height="150%">
                 <feDropShadow dx="0" dy="14" stdDeviation="14" floodColor="#0b2a24" floodOpacity="0.16" />
@@ -440,7 +440,7 @@ export default function IndustriesServed() {
                   y="311"
                   height="5"
                   rx="2.5"
-                  fill="#22b8d9"
+                  fill="#0875FF"
                   initial={{ width: 0 }}
                   whileInView={{ width: 68 }}
                   viewport={{ once: true }}
@@ -513,17 +513,7 @@ export default function IndustriesServed() {
             </motion.g>
 
             {/* accent arcs around the circle */}
-            <motion.path
-              d="M952 425 C1020 415 1100 425 1150 470"
-              fill="none"
-              stroke={ACCENT}
-              strokeWidth="9"
-              strokeLinecap="round"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, delay: 1, ease: "easeOut" }}
-            />
+          
             <motion.path
               d="M740 632 C725 720 760 810 835 860"
               fill="none"
@@ -535,17 +525,7 @@ export default function IndustriesServed() {
               viewport={{ once: true }}
               transition={{ duration: 1.4, delay: 1.1, ease: "easeOut" }}
             />
-            <motion.path
-              d="M1090 884 L1122 866"
-              fill="none"
-              stroke={ACCENT}
-              strokeWidth="9"
-              strokeLinecap="round"
-              initial={{ pathLength: 0, opacity: 0 }}
-              whileInView={{ pathLength: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 1.5 }}
-            />
+            
           </svg>
         </div>
       </div>

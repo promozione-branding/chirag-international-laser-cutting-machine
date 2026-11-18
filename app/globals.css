@@ -51,11 +51,6 @@ body {
   }
 }
 
-/* ---------- Mirror effect (shared by every button) ----------
-   ::before = static glass highlight on the top half
-   ::after  = light streak that sweeps across on hover
-   Both sit at z-index -1 inside an isolated stacking context,
-   so they paint above the button background but below its text/icons. */
 .btn-primary,
 .btn-outline,
 .btn-secondary,

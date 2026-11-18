@@ -14,6 +14,8 @@ import {
 
 import Magnetic from "./ui/Magnetic";
 
+const BRAND = "#0875FF";
+const BRAND_SOFT = "#65A8FF";
 const machines = [
   {
     name: "Fiber Laser Cutters",
@@ -116,7 +118,12 @@ export default function FeaturedMachines() {
                 <a
                   href="/machines"
                   className="inline-flex items-center gap-3 rounded-full bg-[#0866F5] px-6 py-3 text-[13px] font-semibold text-white shadow-lg shadow-blue-500/20 transition-colors hover:bg-[#0653c9]"
-                >
+                style={{
+                    background: `linear-gradient(180deg,${BRAND_SOFT} 0%,${BRAND} 100%)`,
+                    boxShadow:
+                      "0 12px 24px -8px rgba(8,117,255,.38), inset 0 1px 0 rgba(255,255,255,.5)",
+                  }}
+               >
                   View All Machines
                   <ArrowRight size={16} />
                 </a>

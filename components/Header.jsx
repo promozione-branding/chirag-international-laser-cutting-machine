@@ -7,6 +7,9 @@ import Logo from "./art/Logo";
 import Magnetic from "./ui/Magnetic";
 import QuoteModal from "./QuoteModal";
 
+const BRAND = "#0875FF";
+const BRAND_SOFT = "#65A8FF";
+
 const nav = [
   { label: "Home", href: "/" },
   {
@@ -128,6 +131,11 @@ export default function Header() {
               type="button"
               onClick={() => setQuoteOpen(true)}
               className="btn-primary !px-6 !py-3 !text-[15px] !font-semibold"
+          style={{
+                    background: `linear-gradient(180deg,${BRAND_SOFT} 0%,${BRAND} 100%)`,
+                    boxShadow:
+                      "0 12px 24px -8px rgba(8,117,255,.38), inset 0 1px 0 rgba(255,255,255,.5)",
+                  }}
             >
               Get a Quote <ArrowUpRight size={17} />
             </button>
@@ -169,7 +177,12 @@ export default function Header() {
                   setQuoteOpen(true);
                 }}
                 className="btn-primary mt-2 justify-center !py-3.5 !text-[16px]"
-              >
+              style={{
+                    background: `linear-gradient(180deg,"#0875FF" 0%,"#0875FF" 100%)`,
+                    boxShadow:
+                      "0 12px 24px -8px rgba(8,117,255,.38), inset 0 1px 0 rgba(255,255,255,.5)",
+                  }}
+             >
                 Get a Quote <ArrowUpRight size={17} />
               </button>
             </div>
