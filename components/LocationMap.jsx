@@ -1,11 +1,11 @@
 export default function LocationMap({
-  address = "GALI NO-1, 41-B, BHAGAT VIHAR, KARAWAL NAGAR, New Delhi, Delhi, 110094",
-  title = "Rackwell Steel location",
+  address = "Second Floor Right Portion, B-132, Satguru Ram Singh Marg, Mayapuri Industrial Area Phase 1, Bagga, Brothers New Delhi - 110064, Delhi, India",
+  title = "Chirag Internarional",
   zoom = 15,
   height = 450,
 }) {
   const query = encodeURIComponent(address)
-  const src = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3498.9600940430405!2d77.26067077496!3d28.72073858007065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cff87da0efa3b%3A0xd7ca882078f92ee3!2sSisco%20Steel%20Products!5e0!3m2!1sen!2sin!4v1793432336429!5m2!1sen!2sin%22`
+  const src = `https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3502.101163980137!2d77.1244950755007!3d28.62672997566771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjjCsDM3JzM2LjIiTiA3N8KwMDcnMzcuNSJF!5e0!3m2!1sen!2sin!4v1794978873773!5m2!1sen!2sin`
   const viewUrl = `https://www.google.com/maps/search/?api=1&query=${query}`
   const directions = `https://www.google.com/maps/dir/?api=1&destination=${query}`
 

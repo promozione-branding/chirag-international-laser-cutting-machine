@@ -48,11 +48,11 @@ export default function PageHero({
       >
         <nav
           aria-label="Breadcrumb"
-          className="mb-4 flex flex-wrap items-center gap-2 text-[11px] font-semibold text-[#61718d]"
+          className="mb-5 flex flex-wrap items-center gap-2 text-[14px] font-semibold text-[#61718d] sm:text-[15px]"
         >
           {crumbs.map((crumb, i) => (
             <span key={`${crumb.label}-${i}`} className="inline-flex items-center gap-2">
-              {i > 0 && <ChevronRight size={13} />}
+              {i > 0 && <ChevronRight size={16} />}
               {crumb.href ? (
                 <Link href={crumb.href} className="hover:text-[#0866f5]">
                   {crumb.label}
@@ -65,18 +65,18 @@ export default function PageHero({
         </nav>
 
         {eyebrow && (
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#cfe0fa] bg-white/80 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#0866f5]">
-            <Sparkles size={13} /> {eyebrow}
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#cfe0fa] bg-white/80 px-4 py-2 text-[13px] font-extrabold uppercase tracking-[0.16em] text-[#0866f5] sm:text-[14px]">
+            <Sparkles size={16} /> {eyebrow}
           </div>
         )}
 
-        <h1 className="text-[42px] font-extrabold leading-[1.04] tracking-[-0.045em] text-[#102044] sm:text-[54px]">
+        <h1 className="text-[52px] font-extrabold leading-[1.04] tracking-[-0.045em] text-[#102044] sm:text-[68px] lg:text-[76px]">
           {title}{" "}
           {highlight && <span className="text-[#0866f5]">{highlight}</span>}
         </h1>
 
         {description && (
-          <p className="mt-4 max-w-[560px] text-[14px] leading-[1.75] text-[#52627e] sm:text-[15px]">
+          <p className="mt-5 max-w-[680px] text-[17px] leading-[1.75] text-[#52627e] sm:text-[19px] lg:text-[20px]">
             {description}
           </p>
         )}

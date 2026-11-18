@@ -7,7 +7,7 @@ export const contact = {
   whatsapp: "917949292120",
   whatsappText: "Hello, I would like to know more about your laser cutting services.",
   email: "info@cilaser.com",
-  address: "Industrial Area, Phase II, Your City, India",
+  address: "Second Floor Right Portion, B-132, Satguru Ram Singh Marg, Mayapuri Industrial Area Phase 1, Bagga, Brothers New Delhi - 110064, Delhi, India",
   catalogueUrl: "https://www.chiragint.in",
   gst: "07AAHFC2752N1Z7"
 };

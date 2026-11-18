@@ -87,7 +87,7 @@ export default function Footer() {
           <ul className="mt-4 space-y-3 text-[13px] text-white/65">
             <li className="flex gap-2.5">
               <MapPin size={16} className="mt-0.5 shrink-0 text-brand-400" />
-              Industrial Area, Phase II, Your City, India
+              Second Floor Right Portion, B-132, Satguru Ram Singh Marg, Mayapuri Industrial Area Phase 1, Bagga, Brothers New Delhi - 110064, Delhi, India
             </li>
             <li className="flex gap-2.5">
               <Phone size={16} className="shrink-0 text-brand-400" />

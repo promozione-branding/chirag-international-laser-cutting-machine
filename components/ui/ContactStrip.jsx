@@ -8,7 +8,7 @@ export const company = {
   phoneLabel: "079 4929 2120",
   whatsapp: "917949292120",
   email: "info@cilaser.com",
-  address: "Industrial Area, Phase II, Your City, India",
+  address: "Second Floor Right Portion, B-132, Satguru Ram Singh Marg, Mayapuri Industrial Area Phase 1, Bagga, Brothers New Delhi - 110064, Delhi, India",
   catalogueUrl: "https://www.chiragint.in",
 };
 
