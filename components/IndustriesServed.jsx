@@ -555,18 +555,7 @@ export default function IndustriesServed() {
               </motion.g>
             </motion.g>
 
-            {/* accent arc hugging the lower-left of the circle */}
-            <motion.path
-              d="M740 632 C725 720 760 810 835 860"
-              fill="none"
-              stroke={ACCENT}
-              strokeWidth="9"
-              strokeLinecap="round"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.4, delay: 1.1, ease: "easeOut" }}
-            />
+
           </svg>
         </div>
       </div>
