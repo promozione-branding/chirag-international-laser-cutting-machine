@@ -233,12 +233,12 @@ export default function Categories() {
       >
         <defs>
           <linearGradient id="waveA" x1="0" x2="1">
-            <stop offset="0" stopColor="#bcd4ff" stopOpacity=".5" />
-            <stop offset="1" stopColor="#4c8dff" stopOpacity=".5" />
+            <stop offset="0" stopColor="#e3e3e3" stopOpacity=".5" />
+            <stop offset="1" stopColor="#777779" stopOpacity=".5" />
           </linearGradient>
           <linearGradient id="waveB" x1="0" x2="1">
             <stop offset="0" stopColor="#dbe8ff" stopOpacity=".7" />
-            <stop offset="1" stopColor="#8db6ff" stopOpacity=".45" />
+            <stop offset="1" stopColor="#777779" stopOpacity=".45" />
           </linearGradient>
         </defs>
         <path d="M0 90 C240 20 480 130 760 90 S1230 30 1440 80 V160 H0Z" fill="url(#waveB)" />
