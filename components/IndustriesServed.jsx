@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { motion, animate, useInView } from "framer-motion";
+import { motion, animate, useInView, useReducedMotion } from "framer-motion";
 import {
   Factory,
   Car,
@@ -9,11 +9,9 @@ import {
   Armchair,
 } from "lucide-react";
 
-
-
 const IMG = {
   center: "/why_.png",
-  industrial: "/industries/industrial.png", 
+  industrial: "/industries/industrial.png",
   automotive: "/industries/automotive.png",
   construction: "/industries/construction.png",
   leather: "/industries/leather.png",
@@ -21,72 +19,91 @@ const IMG = {
 };
 
 const EASE = [0.16, 1, 0.3, 1];
+const STEP_EASE = [0.65, 0, 0.35, 1];
 const DARK = "#16222e";
-const ACCENT = "#0875FF"; 
+const ACCENT = "#0875FF";
 
-const PATHS = {
-  top: "M738 165 C735 140 760 120 790 108 C900 70 1090 70 1190 110 C1230 125 1245 145 1235 170 L1125 385 C1118 400 1100 402 1085 395 C1020 372 940 372 880 395 C862 402 845 398 838 385 Z",
-  automotive:
-    "M718 200 C700 195 685 205 672 220 L495 435 C478 458 480 480 500 495 L600 565 C615 572 635 570 650 563 L840 470 C858 460 862 440 855 425 L745 215 C738 205 728 200 718 200 Z",
-  construction:
-    "M450 520 C440 530 428 545 426 570 L430 780 C432 815 455 850 495 845 L700 800 C725 790 735 775 728 750 L722 590 C720 575 705 575 690 572 L520 505 C495 498 465 505 450 520 Z",
-  leather:
-    "M1280 200 C1300 195 1315 205 1328 220 L1505 440 C1520 460 1515 485 1495 498 L1350 590 C1335 600 1315 598 1300 590 L1140 435 C1125 420 1122 405 1130 392 L1230 215 C1245 203 1265 198 1280 200 Z",
-  furniture:
-    "M1560 510 C1580 515 1590 540 1590 560 L1575 700 C1572 800 1540 870 1500 885 L1230 845 C1205 840 1200 810 1215 790 L1245 645 C1250 630 1265 620 1285 615 Z",
-};
+/* ------------------------------------------------------------------ */
+/*  Geometry: every card is the SAME ring-sector as the Industrial     */
+/*  card, so together they form one perfect arc around the circle.     */
+/*  Angles are measured clockwise from 12 o'clock.                     */
+/* ------------------------------------------------------------------ */
+const CX = 980;
+const CY = 668;
+const R_IN = 290;
+const R_OUT = 560;
+const R_MID = (R_IN + R_OUT) / 2;
+const HALF = 22; // half of each card's angular width (gap between cards = 4deg)
+const CORNER = 14;
+const PX = CX; // centre of the card in its "top" position
+const PY = CY - R_MID;
+const BOX = 500; // upright content box that always covers the sector
 
-const light = [
-  {
-    key: "automotive",
-    path: PATHS.automotive,
-    img: { x: 515, y: 380, w: 370, h: 200 },
-    Icon: Car,
-    icon: { x: 651, y: 283, s: 50 },
-    lines: [{ t: "Automotive", x: 677, y: 363 }],
-    delay: 0.35,
-    float: 0.2,
-  },
-  {
-    key: "leather",
-    path: PATHS.leather,
-    img: { x: 1120, y: 335, w: 410, h: 270 },
-    Icon: ShoppingBag,
-    icon: { x: 1277, y: 248, s: 52 },
-    lines: [
-      { t: "Leather", x: 1304, y: 341 },
-      { t: "& Goods", x: 1304, y: 371 },
-    ],
-    delay: 0.5,
-    float: 0.8,
-  },
-  {
-    key: "construction",
-    path: PATHS.construction,
-    img: { x: 430, y: 655, w: 305, h: 200 },
-    Icon: Building2,
-    icon: { x: 548, y: 546, s: 60 },
-    lines: [
-      { t: "Construction", x: 579, y: 637 },
-      { t: "& Infrastructure", x: 579, y: 664 },
-    ],
-    delay: 0.65,
-    float: 1.2,
-  },
-  {
-    key: "furniture",
-    path: PATHS.furniture,
-    img: { x: 1205, y: 650, w: 390, h: 250 },
-    Icon: Armchair,
-    icon: { x: 1422, y: 556, s: 60 },
-    lines: [
-      { t: "Furniture", x: 1453, y: 645 },
-      { t: "& Interiors", x: 1453, y: 673 },
-    ],
-    delay: 0.8,
-    float: 0.5,
-  },
+const rad = (d) => (d * Math.PI) / 180;
+const pt = (r, deg) => [CX + r * Math.sin(rad(deg)), CY - r * Math.cos(rad(deg))];
+const n2 = (n) => n.toFixed(2);
+
+function sectorPath(r1, r2, a0, a1, rc) {
+  const dO = (rc / r2) * (180 / Math.PI);
+  const dI = (rc / r1) * (180 / Math.PI);
+  const P = (r, a) => pt(r, a).map(n2).join(" ");
+  return [
+    `M${P(r2, a0 + dO)}`,
+    `A${r2} ${r2} 0 0 1 ${P(r2, a1 - dO)}`,
+    `Q${P(r2, a1)} ${P(r2 - rc, a1)}`,
+    `L${P(r1 + rc, a1)}`,
+    `Q${P(r1, a1)} ${P(r1, a1 - dI)}`,
+    `A${r1} ${r1} 0 0 0 ${P(r1, a0 + dI)}`,
+    `Q${P(r1, a0)} ${P(r1 + rc, a0)}`,
+    `L${P(r2 - rc, a0)}`,
+    `Q${P(r2, a0)} ${P(r2, a0 + dO)}`,
+    "Z",
+  ].join(" ");
+}
+
+function arcPath(r, a0, a1) {
+  const [x0, y0] = pt(r, a0);
+  const [x1, y1] = pt(r, a1);
+  const large = Math.abs(a1 - a0) > 180 ? 1 : 0;
+  return `M${n2(x0)} ${n2(y0)} A${r} ${r} 0 ${large} 1 ${n2(x1)} ${n2(y1)}`;
+}
+
+const SECTOR = sectorPath(R_IN, R_OUT, -HALF, HALF, CORNER);
+
+/* clockwise order, starting from bottom-left */
+const CARDS = [
+  { key: "construction", Icon: Building2, lines: ["Construction", "& Infrastructure"] },
+  { key: "automotive", Icon: Car, lines: ["Automotive"] },
+  { key: "leather", Icon: ShoppingBag, lines: ["Leather", "& Goods"] },
+  { key: "furniture", Icon: Armchair, lines: ["Furniture", "& Interiors"] },
 ];
+
+/*
+  Track position t (0..4) -> angle / scale / opacity.
+  Slots (deg): -96 (bottom-left), -48 (upper-left), [0 = Industrial, fixed],
+               +48 (upper-right), +96 (bottom-right).
+  - 0 -> 1 : bottom-left  -> upper-left
+  - 1 -> 2 : upper-left   -> upper-right, sliding BEHIND the Industrial card
+  - 2 -> 3 : upper-right  -> bottom-right
+  - 3 -> 4 : bottom-right fades out (shrinks back), re-enters from behind
+             at bottom-left. The bottom of the circle stays empty.
+*/
+function cardState(t) {
+  const j = Math.min(3, Math.floor(t));
+  const f = t - j;
+  if (j === 0) return { a: -96 + 48 * f, s: 1, o: 1 };
+  if (j === 1) {
+    const d = Math.sin(Math.PI * f);
+    return { a: -48 + 96 * f, s: 1 - 0.08 * d, o: 1 - 0.45 * d };
+  }
+  if (j === 2) return { a: 48 + 48 * f, s: 1, o: 1 };
+  if (f < 0.5) {
+    const g = f * 2;
+    return { a: 96 + 12 * g, s: 1 - 0.18 * g, o: 1 - g };
+  }
+  const g = (f - 0.5) * 2;
+  return { a: -108 + 12 * g, s: 0.82 + 0.18 * g, o: g };
+}
 
 function CountUp({ to = 5, suffix = "+" }) {
   const ref = useRef(null);
@@ -109,14 +126,129 @@ function CountUp({ to = 5, suffix = "+" }) {
   );
 }
 
-export default function IndustriesServed() {
-  const fb = { transformBox: "fill-box", transformOrigin: "center" };
+const fb = { transformBox: "fill-box", transformOrigin: "center" };
 
+/* The four orbiting cards (re-renders on its own, so the rest of the section stays still) */
+function OrbitCards() {
+  const reduce = useReducedMotion();
+  const [p, setP] = useState(0);
+  const paused = useRef(false);
+
+  useEffect(() => {
+    if (reduce) return;
+    let dead = false;
+    let ctrl;
+    let base = 0;
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    (async () => {
+      while (!dead) {
+        await sleep(2000); // rest on each position
+        while (paused.current && !dead) await sleep(150);
+        if (dead) break;
+        ctrl = animate(base, base + 1, {
+          duration: 1.5,
+          ease: STEP_EASE,
+          onUpdate: (v) => setP(v % 4),
+        });
+        await ctrl;
+        base = (base + 1) % 4;
+      }
+    })();
+    return () => {
+      dead = true;
+      ctrl?.stop();
+    };
+  }, [reduce]);
+
+  return (
+    <motion.g
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.9, delay: 0.5 }}
+      onMouseEnter={() => (paused.current = true)}
+      onMouseLeave={() => (paused.current = false)}
+    >
+      {CARDS.map((c, i) => {
+        const { a, s, o } = cardState((i + p) % 4);
+        const { Icon } = c;
+        // rotate around the circle centre (+ slight shrink towards it when "behind")
+        const outer = `translate(${CX} ${CY}) rotate(${n2(a)}) scale(${n2(s)}) translate(${-CX} ${-CY})`;
+        // keep photo + text upright while the card travels
+        const counter = `rotate(${n2(-a)} ${PX} ${PY})`;
+        const ys = c.lines.length > 1 ? [-42, -14] : [-28];
+
+        return (
+          <g key={c.key} opacity={o}>
+            <g filter="url(#soft)">
+              <path d={SECTOR} transform={outer} fill="#e3e8ed" />
+            </g>
+            <g transform={outer}>
+              <path d={SECTOR} fill="url(#seg-light)" />
+              <g clipPath="url(#clip-sector)">
+                <g transform={counter}>
+                  <motion.image
+                    href={IMG[c.key]}
+                    x={PX - BOX / 2}
+                    y={PY - BOX / 2}
+                    width={BOX}
+                    height={BOX}
+                    preserveAspectRatio="xMidYMid slice"
+                    style={fb}
+                    animate={{ scale: [1, 1.06, 1] }}
+                    transition={{ duration: 10, delay: i * 0.6, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <rect
+                    x={PX - BOX / 2}
+                    y={PY - BOX / 2}
+                    width={BOX}
+                    height={BOX}
+                    fill="url(#fade-card)"
+                  />
+                </g>
+              </g>
+              <g transform={counter}>
+                <Icon
+                  x={PX - 27}
+                  y={PY - 125}
+                  width={54}
+                  height={54}
+                  strokeWidth={1.4}
+                  color={DARK}
+                />
+                {c.lines.map((t, k) => (
+                  <text
+                    key={t}
+                    x={PX}
+                    y={PY + ys[k]}
+                    textAnchor="middle"
+                    fontSize={26}
+                    fontWeight={700}
+                    fill={DARK}
+                    stroke="#eef1f4"
+                    strokeWidth={5}
+                    strokeLinejoin="round"
+                    paintOrder="stroke"
+                    style={{ fontFamily: "inherit" }}
+                  >
+                    {t}
+                  </text>
+                ))}
+              </g>
+            </g>
+          </g>
+        );
+      })}
+    </motion.g>
+  );
+}
+
+export default function IndustriesServed() {
   return (
     <section className="relative overflow-hidden py-14 sm:py-20 lg:py-0">
       <motion.div
         aria-hidden
-className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] rounded-full bg-gradient-to-tr from-gray-500/40 via-gray-300/20 to-transparent blur-2xl"
+        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] rounded-full bg-gradient-to-tr from-gray-500/40 via-gray-300/20 to-transparent blur-2xl"
         animate={{ x: [0, 30, 0], y: [0, -14, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -219,7 +351,7 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
 
         <div className="relative w-full">
           <svg
-            viewBox="420 60 1252 880"
+            viewBox="400 80 1160 880"
             className="h-auto w-full overflow-visible"
             role="img"
             aria-label="Industries we serve: Industrial Manufacturing, Automotive, Leather and Goods, Construction and Infrastructure, Furniture and Interiors"
@@ -233,16 +365,17 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
                 <stop offset="0" stopColor="#0f1a24" />
                 <stop offset="1" stopColor="#2b3a48" />
               </linearGradient>
-              <linearGradient id="fade-top" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#eef1f4" stopOpacity="1" />
-                <stop offset="0.55" stopColor="#eef1f4" stopOpacity="0" />
+              {/* light fade over the upper part of each orbiting card so text stays readable */}
+              <linearGradient id="fade-card" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#eef1f4" stopOpacity="0.97" />
+                <stop offset="0.42" stopColor="#eef1f4" stopOpacity="0.95" />
+                <stop offset="0.72" stopColor="#eef1f4" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="arc-green" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stopColor="#0875FF" stopOpacity="0" />
                 <stop offset="0.5" stopColor="#0875FF" />
                 <stop offset="1" stopColor="#0875FF" stopOpacity="0.2" />
               </linearGradient>
-              {/* darkens the top photo so white text stays readable */}
               <linearGradient id="tint-top" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stopColor="#0f1a24" stopOpacity="0.55" />
                 <stop offset="1" stopColor="#0f1a24" stopOpacity="0.85" />
@@ -251,25 +384,21 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
                 <stop offset="0" stopColor="#d9f6ff" stopOpacity="0.95" />
                 <stop offset="1" stopColor="#0875FF" stopOpacity="0" />
               </radialGradient>
-              <filter id="soft" x="-20%" y="-20%" width="140%" height="150%">
-                <feDropShadow dx="0" dy="14" stdDeviation="14" floodColor="#0b2a24" floodOpacity="0.16" />
+              <filter id="soft" x="-30%" y="-30%" width="160%" height="170%">
+                <feDropShadow dx="0" dy="10" stdDeviation="12" floodColor="#0b2a24" floodOpacity="0.16" />
               </filter>
               <clipPath id="clip-center">
-                <circle cx="980" cy="668" r="218" />
+                <circle cx={CX} cy={CY} r="218" />
               </clipPath>
-              {light.map((s) => (
-                <clipPath key={s.key} id={`clip-${s.key}`}>
-                  <path d={s.path} />
-                </clipPath>
-              ))}
-              <clipPath id="clip-top">
-                <path d={PATHS.top} />
+              {/* one shared sector clip: every card has the Industrial card's shape */}
+              <clipPath id="clip-sector">
+                <path d={SECTOR} />
               </clipPath>
             </defs>
 
-            {/* big outer arc on the far right */}
+            {/* guide arcs that run with the cards (open at the bottom) */}
             <motion.path
-              d="M1350 160 C1520 220 1640 400 1635 620 C1632 760 1580 860 1520 892"
+              d={arcPath(272, -118, 118)}
               fill="none"
               stroke="url(#arc-green)"
               strokeWidth="2.5"
@@ -280,128 +409,47 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
               transition={{ duration: 2, delay: 0.3, ease: "easeInOut" }}
             />
             <path
-              d="M1500 100 C1610 190 1665 330 1660 500"
+              d={arcPath(582, -122, 122)}
               fill="none"
               stroke="#e3e8ed"
               strokeWidth="1.5"
             />
 
-            {/* ---------- light segments ---------- */}
-            {light.map((s) => {
-              const { Icon } = s;
-              return (
-                <motion.g
-                  key={s.key}
-                  style={fb}
-                  initial={{ opacity: 0, scale: 0.85, y: 40 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.9, delay: s.delay, ease: EASE }}
-                  whileHover={{ scale: 1.04 }}
-                  className="cursor-pointer"
-                >
-                  <motion.g
-                    style={fb}
-                    animate={{ y: [0, -7, 0] }}
-                    transition={{
-                      duration: 5,
-                      delay: s.float,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <path d={s.path} fill="url(#seg-light)" filter="url(#soft)" />
-                    <g clipPath={`url(#clip-${s.key})`}>
-                      <motion.image
-                        href={IMG[s.key]}
-                        x={s.img.x}
-                        y={s.img.y}
-                        width={s.img.w}
-                        height={s.img.h}
-                        preserveAspectRatio="xMidYMid slice"
-                        style={fb}
-                        animate={{ scale: [1, 1.06, 1] }}
-                        transition={{
-                          duration: 10,
-                          delay: s.float,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      />
-                      <rect
-                        x={s.img.x}
-                        y={s.img.y}
-                        width={s.img.w}
-                        height={s.img.h}
-                        fill="url(#fade-top)"
-                      />
-                    </g>
-                    <Icon
-                      x={s.icon.x}
-                      y={s.icon.y}
-                      width={s.icon.s}
-                      height={s.icon.s}
-                      strokeWidth={1.4}
-                      color={DARK}
-                    />
-                    {s.lines.map((l) => (
-                      <text
-                        key={l.t}
-                        x={l.x}
-                        y={l.y}
-                        textAnchor="middle"
-                        fontSize={s.lines.length > 1 ? 26 : 27}
-                        fontWeight={700}
-                        fill={DARK}
-                        style={{ fontFamily: "inherit" }}
-                      >
-                        {l.t}
-                      </text>
-                    ))}
-                  </motion.g>
-                </motion.g>
-              );
-            })}
+            {/* ---------- orbiting cards (drawn first, so they slide BEHIND Industrial) ---------- */}
+            <OrbitCards />
 
-            {/* ---------- top (dark) segment ---------- */}
+            {/* ---------- Industrial Manufacturing: fixed at the top of the arc ---------- */}
             <motion.g
               style={fb}
               initial={{ opacity: 0, y: -50, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 1, delay: 0.2, ease: EASE }}
-              whileHover={{ scale: 1.04 }}
-              className="cursor-pointer"
             >
-              <motion.g
-                style={fb}
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <path d={PATHS.top} fill="url(#seg-dark)" filter="url(#soft)" />
+              <g filter="url(#soft)">
+                <path d={SECTOR} fill="url(#seg-dark)" />
+              </g>
 
-                {/* industrial photo + dark tint for text legibility */}
-                <g clipPath="url(#clip-top)">
-                  <motion.image
-                    href={IMG.industrial}
-                    x={738}
-                    y={70}
-                    width={510}
-                    height={335}
-                    preserveAspectRatio="xMidYMid slice"
-                    style={fb}
-                    animate={{ scale: [1, 1.06, 1] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <rect x={738} y={70} width={510} height={335} fill="url(#tint-top)" />
-                </g>
+              <g clipPath="url(#clip-sector)">
+                <motion.image
+                  href={IMG.industrial}
+                  x={PX - BOX / 2}
+                  y={PY - BOX / 2}
+                  width={BOX}
+                  height={BOX}
+                  preserveAspectRatio="xMidYMid slice"
+                  style={fb}
+                  animate={{ scale: [1, 1.06, 1] }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <rect x={PX - BOX / 2} y={PY - BOX / 2} width={BOX} height={BOX} fill="url(#tint-top)" />
 
                 {/* decorative flowing lines */}
-                <g clipPath="url(#clip-top)" fill="none" stroke="#6fd6ee" strokeOpacity="0.35">
+                <g fill="none" stroke="#6fd6ee" strokeOpacity="0.35">
                   {[0, 1, 2, 3, 4].map((i) => (
                     <motion.path
                       key={i}
-                      d={`M${1000 + i * 12} 82 C${1110 + i * 12} 110 ${1180 + i * 10} 190 ${1215 + i * 6} 290`}
+                      d={`M${900 + i * 14} 112 C${1000 + i * 12} 150 ${1060 + i * 10} 215 ${1090 + i * 6} 330`}
                       strokeWidth="1"
                       initial={{ pathLength: 0 }}
                       animate={{ pathLength: [0, 1, 1, 0] }}
@@ -414,39 +462,35 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
                     />
                   ))}
                 </g>
-                <path
-                  d="M1090 72 C1170 86 1230 120 1243 160"
-                  fill="none"
-                  stroke={ACCENT}
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                />
-                <Factory
-                  x={940}
-                  y={122}
-                  width={100}
-                  height={86}
-                  strokeWidth={1.3}
-                  color="#fff"
-                />
-                <text x="990" y="248" textAnchor="middle" fontSize="38" fontWeight="700" fill="#fff">
-                  Industrial
-                </text>
-                <text x="990" y="286" textAnchor="middle" fontSize="38" fontWeight="700" fill="#fff">
-                  Manufacturing
-                </text>
-                <motion.rect
-                  x="956"
-                  y="311"
-                  height="5"
-                  rx="2.5"
-                  fill="#0875FF"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: 68 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 1, ease: EASE }}
-                />
-              </motion.g>
+              </g>
+
+              {/* accent along the outer edge */}
+              <path
+                d={arcPath(R_OUT - 3, -HALF + 6, HALF - 6)}
+                fill="none"
+                stroke={ACCENT}
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+
+              <Factory x={PX - 40} y={147} width={80} height={70} strokeWidth={1.3} color="#fff" />
+              <text x={PX} y="272" textAnchor="middle" fontSize="32" fontWeight="700" fill="#fff">
+                Industrial
+              </text>
+              <text x={PX} y="310" textAnchor="middle" fontSize="32" fontWeight="700" fill="#fff">
+                Manufacturing
+              </text>
+              <motion.rect
+                x={PX - 34}
+                y="328"
+                height="5"
+                rx="2.5"
+                fill="#0875FF"
+                initial={{ width: 0 }}
+                whileInView={{ width: 68 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, delay: 1, ease: EASE }}
+              />
             </motion.g>
 
             {/* ---------- centre circle ---------- */}
@@ -457,9 +501,8 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 1.1, delay: 0.1, ease: EASE }}
             >
-              {/* white ring */}
-              <circle cx="980" cy="668" r="236" fill="#fff" filter="url(#soft)" />
-              <circle cx="980" cy="668" r="228" fill="#fff" stroke="#e3e8ed" strokeWidth="2" />
+              <circle cx={CX} cy={CY} r="236" fill="#fff" filter="url(#soft)" />
+              <circle cx={CX} cy={CY} r="228" fill="#fff" stroke="#e3e8ed" strokeWidth="2" />
 
               <g clipPath="url(#clip-center)">
                 <motion.image
@@ -487,8 +530,8 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
 
               {/* rotating dashed orbit */}
               <motion.circle
-                cx="980"
-                cy="668"
+                cx={CX}
+                cy={CY}
                 r="250"
                 fill="none"
                 stroke={ACCENT}
@@ -503,17 +546,16 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
 
               {/* orbiting dot */}
               <motion.g
-                style={{ transformOrigin: "980px 668px" }}
+                style={{ transformOrigin: `${CX}px ${CY}px` }}
                 animate={{ rotate: 360 }}
                 transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
               >
-                <circle cx="980" cy="418" r="7" fill={ACCENT} />
-                <circle cx="980" cy="418" r="14" fill={ACCENT} opacity="0.25" />
+                <circle cx={CX} cy={CY - 250} r="7" fill={ACCENT} />
+                <circle cx={CX} cy={CY - 250} r="14" fill={ACCENT} opacity="0.25" />
               </motion.g>
             </motion.g>
 
-            {/* accent arcs around the circle */}
-          
+            {/* accent arc hugging the lower-left of the circle */}
             <motion.path
               d="M740 632 C725 720 760 810 835 860"
               fill="none"
@@ -525,7 +567,6 @@ className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[620px] 
               viewport={{ once: true }}
               transition={{ duration: 1.4, delay: 1.1, ease: "easeOut" }}
             />
-            
           </svg>
         </div>
       </div>
